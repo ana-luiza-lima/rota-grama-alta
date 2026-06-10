@@ -190,6 +190,21 @@ main {
     transition: box-shadow 0.3s;
 }
 
+
+/* //////////////////////////////////////Cards */
+.card {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    padding: 1.5rem;
+}
+
+.card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--verdemusgo);
+}
+
 .pokemon-card:hover {
     box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4);
 }
@@ -439,16 +454,382 @@ main {
     color: var(--verdefolha);
 }
 
-/* //////////////////////////////////////Cards */
-.card {
+
+/* //////////////////////////////////////Footer */
+footer {
+    background-color: var(--verdefolha);
+    border-top: 4px solid var(--verdemusgo);
+    color: #FFFFFF;
+    padding: 1.5rem 1rem;
+    margin-top: 4rem;
+}
+
+.footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-section h4 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.footer-section p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+.footer-divisor {
+    border-top: 2px solid #FFFFFF;
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+footer p {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* //////////////////////////////////////Carrinho */
+.carrinho-vazio {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    padding: 2rem;
+    text-align: center;
+}
+
+.carrinho-vazio p {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.carrinho-item {
+    background: #F1F8E9;
+    border: 2px solid var(--verdemusgo);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.carrinho-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.carrinho-item-info {
+    flex: 1;
+}
+
+.carrinho-item-nome {
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.carrinho-item-preco {
+    font-weight: bold;
+    color: var(--verdefolha);
+}
+
+.carrinho-item-controles {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.carrinho-item-controles input {
+    width: 60px;
+    padding: 0.4rem;
+    border: 2px solid var(--verdemusgo);
+    text-align: center;
+}
+
+.carrinho-sumario {
     background: #F1F8E9;
     border: 3px solid #000000;
     padding: 1.5rem;
+    margin-top: 2rem;
 }
 
-.card h2 {
+.sumario-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+}
+
+.sumario-total {
+    border-top: 2px solid var(--verdemusgo);
+    padding-top: 1rem;
     font-size: 1.2rem;
+    color: var(--verdefolha);
+}
+
+.checkout-btn {
+    width: 100%;
+    background: linear-gradient(135deg,var(--verdefolha) 0%, #1a6b1a 100%);
+    color: #FFFFFF;
+    margin-top: 1rem;
+    padding: 0.75rem;
+}
+
+
+/*////////////////////////////////////// Conta */ 
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.info-group {
+    margin-bottom: 1rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color:  var(--verdegrama);
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+.info-valor {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--verdefolha);
+    margin-top: 0.25rem;
+}
+
+.pokemon-pedido {
+    background: #FFFFFF;
+    border: 2px solid var(--verdemusgo);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.id-pedido{
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 0.8rem;
+}
+
+.data-pedido {
+    font-size: 0.8rem;
+    color: var(--verdegrama);
+}
+
+.valor-pedido {
+    font-weight: bold;
+    color: var(--verdefolha);
+    font-size: 0.95rem;
+}
+
+.sumario-card {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.sumario-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+    margin-bottom: 0.5rem;
+}
+
+.sumario-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--verdefolha);
+}
+
+
+/* Login/cadastro Container */
+
+.login-container,
+.cadastro-container {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+}
+
+.cadastro-container {
+    max-width: 450px;
+}
+
+.subtitulo {
+    text-align: center;
+    color:  var(--verdegrama);
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+}
+
+.divisor {
+    border-top: 2px solid var(--verdemusgo);
+    margin: 1.5rem 0;
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.divisor p {
+    color:  var(--verdegrama);
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.divisor a {
+    color: var(--verdefolha);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.divisor a:hover {
+    text-decoration: underline;
+}
+
+.test-info {
+    background: #8B7355;
+    border: 2px solid var(--verdemusgo);
+    padding: 0.75rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--verdefolha);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* ////////////////////////////////////////////////////Relatórios */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--verdefolha);
+}
+
+.search-card {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.search-card h2 {
+    font-size: 1rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--verdemusgo);
+}
+
+.search-controles {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/*//////////////////////////////////////////////////// Tabelas */
+
+.table-card {
+    background: #F1F8E9;
+    border: 3px solid #000000;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: var(--verdefolha);
+    color: #FFFFFF;
+}
+
+th {
+    padding: 0.75rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-bottom: 2px solid var(--verdemusgo);
+}
+
+td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--verdemusgo);
+    font-size: 0.9rem;
+}
+
+tbody tr:hover {
+    background: #E8F5E9;
+}
+
+.empty-message {
+    padding: 2rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
 }
