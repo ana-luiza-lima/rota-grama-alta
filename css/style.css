@@ -17,6 +17,9 @@ body {
     background-color: #E8F5E9;
     color: var(--verdegrama);
     line-height: 1.6;
+}
+
+body.footer-ancorado {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -164,6 +167,9 @@ main {
     display: grid;
     grid-template-columns: 1fr 5fr 1fr;
     gap: 1rem;
+}
+
+body.footer-ancorado main {
     flex: 1;
 }
 
@@ -478,6 +484,10 @@ footer {
     border-top: 4px solid var(--verdemusgo);
     color: #FFFFFF;
     padding: 1.5rem 1rem;
+    margin-top: 4rem;
+}
+
+body.footer-ancorado footer {
     margin-top: auto;
 }
 
@@ -528,6 +538,13 @@ footer p {
     border: 3px solid #000000;
     padding: 2rem;
     text-align: center;
+}
+
+body.footer-ancorado .carrinho-vazio {
+    grid-column: 2;
+    justify-self: center;
+    align-self: center;
+    width: min(100%, 320px);
 }
 
 .carrinho-vazio p {
