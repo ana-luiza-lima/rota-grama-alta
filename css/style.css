@@ -928,10 +928,6 @@ main > .content-grid > div:last-child button {
 
 /* ////////////////////////////////////////////////////Relatórios Admin */
 
-.search-card + .search-card {
-    margin-top: 1rem;
-}
-
 #buscarClienteInput,
 #buscarCompraInput,
 #filtroCompraAdmin {
