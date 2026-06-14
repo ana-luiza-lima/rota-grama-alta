@@ -57,6 +57,11 @@ header h1 {
     gap: 0.5rem;
 }
 
+a {
+    text-decoration: none; 
+    color: inherit; 
+}
+
 /* //////////////////////////////////////////////////////////////Botões */
 button {
     border: 3px solid;
@@ -480,7 +485,7 @@ footer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1rem;    
 }
 
 .footer-section h4 {
@@ -604,7 +609,7 @@ footer p {
 
 .content-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 2fr;
     gap: 2rem;
 }
 

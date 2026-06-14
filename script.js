@@ -173,7 +173,7 @@ const estoque = {
         preco: 10000
     }
 }
-
+// ------------------------------------------------
 function formatarPreco(valor) {
     return valor.toLocaleString("pt-BR", {
         style: "currency",
@@ -241,10 +241,6 @@ function renderizarFooter() {
                 <div class="footer-section">
                     <h4>CONTATO</h4>
                     <p>Email: rotagramalta@pokemon.com<br>Tel: (55) 9999-9999</p>
-                </div>
-                <div class="footer-section">
-                    <h4>LINKS</h4>
-                    <p><a href="#">Política de Privacidade</a><br><a href="#">Termos de Serviço</a></p>
                 </div>
             </div>
             <div class="footer-divisor">
