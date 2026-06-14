@@ -252,5 +252,211 @@ function renderizarFooter() {
     footerContainer.innerHTML = footerHtml;
 }
 
+
+// Cadastro de usuário
+
+function validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email); // .test para verificar se o email é válido
+}
+
+function validarCPF(cpf) {
+    const cpfLimpo = cpf.replace(/\D/g, "");
+    if (cpfLimpo.length !== 11) return false;
+
+    let soma = 0;
+    let resto;
+
+    for (let i = 1; i <= 9; i++) 
+        soma = soma + parseInt(cpfLimpo.substring(i - 1, i)) * (11 - i);
+
+    resto = (soma * 10) % 11;
+    if ((resto === 10) || (resto === 11)) resto = 0;
+    if (resto !== parseInt(cpfLimpo.substring(9, 10))) return false;
+    soma = 0;
+    for (let i = 1; i <= 10; i++) 
+        soma = soma + parseInt(cpfLimpo.substring(i - 1, i)) * (12 - i);
+    
+    resto = (soma * 10) % 11;
+    if ((resto === 10) || (resto === 11)) resto = 0;
+    if (resto !== parseInt(cpfLimpo.substring(10, 11))) return false;
+
+    return true;
+}
+
+function validarSenha(senha) {
+    return senha.length >= 6;
+}
+
+function obterUsuarios() {
+    const usuarios = localStorage.getItem("usuarios");
+    return usuarios ? JSON.parse(usuarios) : [];
+}
+
+function salvarUsuarios(usuarios) {
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+}
+
+function usuarioJaExiste(cpf) {
+    const usuarios = obterUsuarios();
+    return usuarios.some(u => u.cpf === cpf);
+}
+
+function gerarIDUsuario() {
+    const usuarios = obterUsuarios();
+
+    if (usuarios.length === 0) return "C001";
+
+
+    const idsNumericos = usuarios.map(u => {
+        return parseInt(u.id.replace('C', ''));
+    });
+
+    const maiorID = Math.max(...idsNumericos);
+    const proximoNumero = maiorID + 1;
+    return `C${String(proximoNumero).padStart(3, "0")}`;
+}
+
+function realizarCadastro(event) {
+    event.preventDefault();
+
+    const nome = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const cpf = document.getElementById("cpf").value.trim();
+    const senha = document.getElementById("password").value;
+    const confirmaSenha = document.getElementById("confirm-password").value;
+
+    // Validações
+    if (!nome) {
+        alert("Por favor, insira seu nome.");
+        return;
+    }
+
+    if (!email) {
+        alert("Por favor, insira seu email.");
+        return;
+    }
+
+    if (!validarEmail(email)) {
+        alert("Email inválido. Insira um email válido.");
+        return;
+    }
+
+    if (!cpf) {
+        alert("Por favor, insira seu CPF.");
+        return;
+    }
+
+    if (!validarCPF(cpf)) {
+        alert("CPF inválido. Insira um CPF válido (11 dígitos).");
+        return;
+    }
+
+    if (!senha) {
+        alert("Por favor, insira uma senha.");
+        return;
+    }
+
+    if (!validarSenha(senha)) {
+        alert("Senha deve ter pelo menos 6 caracteres.");
+        return;
+    }
+
+    if (senha !== confirmaSenha) {
+        alert("As senhas não correspondem.");
+        return;
+    }
+
+    if (usuarioJaExiste(cpf)) {
+        alert("Este CPF já está cadastrado.");
+        return;
+    }
+
+    // Criar novo usuário
+    const novoUsuario = {
+        id: gerarIDUsuario(),
+        nome: nome,
+        email: email,
+        cpf: cpf,
+        senha: senha,
+        dataCadastro: new Date().toLocaleDateString("pt-BR")
+    };
+
+    const usuarios = obterUsuarios();
+    usuarios.push(novoUsuario);
+    salvarUsuarios(usuarios);
+
+
+    document.querySelector("form").reset();
+    alert("Cadastro realizado com sucesso! Você será redirecionado para o login.");
+
+    // Redirecionar para login
+    setTimeout(() => {
+        window.location.href = "login.html";
+    }, 1000);
+}
+
+// Inicializar o sistema de cadastro
+function inicializarCadastro() {
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", realizarCadastro);
+    }
+}
+
+// Login
+
+function realizarLogin(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("password").value;
+
+    // Validações
+    if (!email) {
+        alert("Por favor, insira seu email.");
+        return;
+    }
+
+    if (!senha) {
+        alert("Por favor, insira sua senha.");
+        return;
+    }
+
+    // Buscar usuário no localStorage
+    const usuarios = obterUsuarios();
+    const usuario = usuarios.find(u => u.email === email);
+
+    if (!usuario) {
+        alert("Email não encontrado. Verifique ou cadastre-se.");
+        return;
+    }
+
+    if (usuario.senha !== senha) {
+        alert("Senha incorreta.");
+        return;
+    }
+
+
+    localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+    alert(`Bem-vindo, ${usuario.nome}!`);
+
+    setTimeout(() => {
+        window.location.href = "carrinho.html";
+    }, 1000);
+}
+
+function inicializarLogin() {
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", realizarLogin);
+    }
+}
+
+
+// Inicializa
+
 document.addEventListener("DOMContentLoaded", renderizarPokemons);
 document.addEventListener("DOMContentLoaded", renderizarFooter);
+document.addEventListener("DOMContentLoaded", inicializarCadastro);
+document.addEventListener("DOMContentLoaded", inicializarLogin);
