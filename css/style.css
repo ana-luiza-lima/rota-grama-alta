@@ -81,8 +81,8 @@ button:active {
 }
 
 button.btn-secundario {
-    background: linear-gradient(135deg, #8B7355 0%, #6B5344 100%);
-    color: #FFFFFF;
+    background: linear-gradient(135deg, #DFDFDF 0%, #BFBFBF 100%);
+    color: #000000;
     border-color: #FFFFFF #000000 #000000 #FFFFFF;
 }
 
@@ -607,10 +607,66 @@ footer p {
 
 /*////////////////////////////////////// Conta */ 
 
-.content-grid {
-    display: grid;
-    grid-template-columns: 2fr 2fr;
+main > .content-grid {
+    grid-column: 2;
+    display: flex;
     gap: 2rem;
+    width: 100%;
+    align-items: flex-start;
+}
+
+main > .content-grid > div:first-child {
+    flex: 2;
+    min-width: 0;
+}
+
+main > .content-grid > div:last-child {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+main > .content-grid > div > .card,
+main > .content-grid > div > .sumario-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+main > .content-grid .card-informacoes {
+    position: relative;
+}
+
+main > .content-grid .btn-editar-conta {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.conta-input-edicao {
+    width: 100%;
+    border: 2px solid var(--verdemusgo);
+    background: #FFFFFF;
+    color: var(--verdegrama);
+    font: inherit;
+    padding: 0.3rem 0.4rem;
+    box-sizing: border-box;
+}
+
+main > .content-grid > div:last-child button {
+    width: 50%;
+    max-width: 20em;
+    display: block;
+    margin: 0 auto;
 }
 
 .info-group {
@@ -682,22 +738,55 @@ footer p {
 
 /* Login/cadastro Container */
 
+.login-bg,
+.cadastro-bg {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .login-container,
 .cadastro-container {
     background: #F1F8E9;
     border: 3px solid #000000;
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
     padding: 2rem;
+    max-width: 450px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.login-container {
     max-width: 400px;
+}
+
+.login-container h1,
+.cadastro-container h1,
+.login-container .subtitulo,
+.cadastro-container .subtitulo,
+.login-container .divisor,
+.cadastro-container .divisor,
+.login-container .back-link,
+.cadastro-container .back-link {
+    text-align: center;
     width: 100%;
 }
 
-.cadastro-container {
-    max-width: 450px;
+
+
+
+.login-container button[type="submit"] {
+    display: block;
+    margin: 0 auto;
+    width: auto;
 }
 
+
 .subtitulo {
-    text-align: center;
     color:  var(--verdegrama);
     margin-bottom: 1.5rem;
     font-weight: bold;
@@ -707,7 +796,6 @@ footer p {
     border-top: 2px solid var(--verdemusgo);
     margin: 1.5rem 0;
     padding-top: 1rem;
-    text-align: center;
 }
 
 .divisor p {

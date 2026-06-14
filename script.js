@@ -453,6 +453,163 @@ function inicializarLogin() {
     }
 }
 
+function verificarUsuarioLogado() {
+    return localStorage.getItem("usuarioLogado");
+}
+
+function obterUsuarioLogado() {
+    const usuario = localStorage.getItem("usuarioLogado");
+    return usuario ? JSON.parse(usuario) : null;
+}
+
+function salvarUsuarioLogado(usuarioAtualizado) {
+    localStorage.setItem("usuarioLogado", JSON.stringify(usuarioAtualizado));
+
+    const usuarios = obterUsuarios();
+    const usuariosAtualizados = usuarios.map(function(usuario) {
+        if (usuario.id === usuarioAtualizado.id) {
+            return usuarioAtualizado;
+        }
+        return usuario;
+    });
+
+    salvarUsuarios(usuariosAtualizados);
+}
+
+function inicializarBotaoConta() {
+    const botaoConta = document.getElementById("btnConta");
+
+    if (!botaoConta) {
+        return;
+    }
+
+    botaoConta.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        if (verificarUsuarioLogado()) {
+            window.location.href = "conta.html";
+            return;
+        }
+
+        window.location.href = "login.html";
+    });
+}
+
+function renderizarConta() {
+    const usuario = obterUsuarioLogado();
+
+    if (!usuario) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const elementoNome = document.getElementById("contaNome");
+    const elementoEmail = document.getElementById("contaEmail");
+    const elementoCpf = document.getElementById("contaCpf");
+    const elementoId = document.getElementById("contaId");
+    const totalCompras = document.getElementById("totalCompras");
+    const gastoTotal = document.getElementById("gastoTotal");
+
+    if (elementoNome) elementoNome.textContent = usuario.nome;
+    if (elementoEmail) elementoEmail.textContent = usuario.email;
+    if (elementoCpf) elementoCpf.textContent = usuario.cpf;
+    if (elementoId) elementoId.textContent = usuario.id;
+    if (totalCompras) totalCompras.textContent = "0";
+    if (gastoTotal) gastoTotal.textContent = "R$ 0,00";
+}
+
+function ativarEdicaoConta() {
+    const botaoEditar = document.getElementById("btnEditarConta");
+    const campoNome = document.getElementById("contaNome");
+    const campoEmail = document.getElementById("contaEmail");
+    const campoCpf = document.getElementById("contaCpf");
+    const campoId = document.getElementById("contaId");
+    const usuario = obterUsuarioLogado();
+
+    if (!botaoEditar || !campoNome || !campoEmail || !campoCpf || !campoId || !usuario) {
+        return;
+    }
+
+    var modoEdicao = false;
+
+    function criarInput(valor, id) {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.value = valor;
+        input.id = id;
+        input.className = "conta-input-edicao";
+        return input;
+    }
+
+    function entrarModoEdicao() {
+        var nomeAtual = campoNome.textContent;
+        var emailAtual = campoEmail.textContent;
+        var cpfAtual = campoCpf.textContent;
+
+        campoNome.innerHTML = "";
+        campoEmail.innerHTML = "";
+        campoCpf.innerHTML = "";
+
+        campoNome.appendChild(criarInput(nomeAtual, "editNome"));
+        campoEmail.appendChild(criarInput(emailAtual, "editEmail"));
+        campoCpf.appendChild(criarInput(cpfAtual, "editCpf"));
+
+        botaoEditar.textContent = "✓";
+        botaoEditar.setAttribute("aria-label", "Salvar informações");
+        modoEdicao = true;
+    }
+
+    function salvarEdicao() {
+        var novoNome = document.getElementById("editNome").value.trim();
+        var novoEmail = document.getElementById("editEmail").value.trim();
+        var novoCpf = document.getElementById("editCpf").value.trim();
+
+        if (!novoNome || !novoEmail || !novoCpf) {
+            alert("Preencha nome, email e CPF.");
+            return;
+        }
+
+        var usuarioAtualizado = {
+            id: usuario.id,
+            nome: novoNome,
+            email: novoEmail,
+            cpf: novoCpf,
+            senha: usuario.senha,
+            dataCadastro: usuario.dataCadastro
+        };
+
+        salvarUsuarioLogado(usuarioAtualizado);
+        renderizarConta();
+        modoEdicao = false;
+        botaoEditar.textContent = "✎";
+        botaoEditar.setAttribute("aria-label", "Editar informações");
+    }
+
+    botaoEditar.addEventListener("click", function() {
+        if (!modoEdicao) {
+            entrarModoEdicao();
+            return;
+        }
+
+        salvarEdicao();
+    });
+}
+
+function inicializarConta() {
+    if (document.getElementById("contaNome")) {
+        renderizarConta();
+        ativarEdicaoConta();
+    }
+
+    const botaoSair = document.getElementById("btnSair");
+
+    if (botaoSair) {
+        botaoSair.addEventListener("click", function() {
+            localStorage.removeItem("usuarioLogado");
+        });
+    }
+}
+
 
 // Inicializa
 
@@ -460,3 +617,5 @@ document.addEventListener("DOMContentLoaded", renderizarPokemons);
 document.addEventListener("DOMContentLoaded", renderizarFooter);
 document.addEventListener("DOMContentLoaded", inicializarCadastro);
 document.addEventListener("DOMContentLoaded", inicializarLogin);
+document.addEventListener("DOMContentLoaded", inicializarBotaoConta);
+document.addEventListener("DOMContentLoaded", inicializarConta);
