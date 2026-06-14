@@ -17,6 +17,9 @@ body {
     background-color: #E8F5E9;
     color: var(--verdegrama);
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -161,6 +164,7 @@ main {
     display: grid;
     grid-template-columns: 1fr 5fr 1fr;
     gap: 1rem;
+    flex: 1;
 }
 
 .main-conteudo {
@@ -474,7 +478,7 @@ footer {
     border-top: 4px solid var(--verdemusgo);
     color: #FFFFFF;
     padding: 1.5rem 1rem;
-    margin-top: 4rem;
+    margin-top: auto;
 }
 
 .footer-container {
