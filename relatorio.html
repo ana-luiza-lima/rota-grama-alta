@@ -12,58 +12,83 @@
 <body>
     <header>
         <div class="header-container">
-            <h1>RELATORIOS</h1>
-            <button class="btn-secundario"><a href="index.html">VOLTAR</a></button>
+            <h1>RELATORIOS DO ADMINISTRADOR</h1>
+            <button class="btn-secundario" id="btnSairAdmin" type="button" onclick="sairAdmin()">SAIR</button>
         </div>
     </header>
 
     <main>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">TOTAL DE COMPRAS</div>
-                <div class="stat-value">0</div>
+                <div class="stat-label">CLIENTES</div>
+                <div class="stat-value" id="totalClientes">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">COMPRAS</div>
+                <div class="stat-value" id="totalComprasAdmin">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">RECEITA TOTAL</div>
-                <div class="stat-value">R$ 0,00</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">CLIENTES</div>
-                <div class="stat-value">0</div>
+                <div class="stat-value" id="receitaTotalAdmin">R$ 0,00</div>
             </div>
         </div>
 
         <div class="search-card">
-            <h2>BUSCAR</h2>
+            <h2>RELATÓRIO DE CLIENTES</h2>
             <div class="search-controles">
-                <select>
-                    <option>TODAS</option>
-                    <option>POR ID</option>
-                    <option>POR USUARIO</option>
-                    <option>POR DATA</option>
-                </select>
-                <input type="text" placeholder="Digite para buscar...">
-                <button>EXPORTAR</button>
+                <input type="text" id="buscarClienteInput" placeholder="Pesquisar por nome, ID, e-mail ou CPF...">
+            </div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>NOME</th>
+                            <th>EMAIL</th>
+                            <th>CPF</th>
+                            <th>COMPRAS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyClientesAdmin">
+                        <tr>
+                            <td colspan="5" class="empty-message">Nenhum cliente encontrado</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID COMPRA</th>
-                        <th>USUARIO</th>
-                        <th>DATA</th>
-                        <th>ITENS</th>
-                        <th>VALOR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5" class="empty-message">Nenhuma compra encontrada</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="search-card">
+            <h2>BUSCA DE COMPRAS</h2>
+            <div class="search-controles">
+                <select id="filtroCompraAdmin">
+                    <option value="todas">TODAS</option>
+                    <option value="id">POR ID</option>
+                    <option value="cliente">POR CLIENTE</option>
+                    <option value="data">POR DATA</option>
+                    <option value="valor">POR VALOR</option>
+                    <option value="produto">POR PRODUTO</option>
+                </select>
+                <input type="text" id="buscarCompraInput" placeholder="Digite para buscar...">
+            </div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID COMPRA</th>
+                            <th>CLIENTE</th>
+                            <th>DATA</th>
+                            <th>ITENS</th>
+                            <th>VALOR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyComprasAdmin">
+                        <tr>
+                            <td colspan="5" class="empty-message">Nenhuma compra encontrada</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 

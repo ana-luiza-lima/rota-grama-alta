@@ -13,7 +13,7 @@
     <header>
         <div class="header-container">
             <h1>MINHA CONTA</h1>
-            <button class="btn-secundario" id="btnSair"><a href="index.html">SAIR</a></button>
+            <button class="btn-secundario" id="btnSair" type="button">SAIR</button>
         </div>
     </header>
 
@@ -71,6 +71,16 @@
     </main>
 
     <footer></footer>
+
+    <div id="modalCompra" class="modal-overlay-conta" aria-hidden="true">
+        <div class="modal-conteudo-conta">
+            <div class="modal-header-conta">
+                <h2>DETALHES DA COMPRA</h2>
+                <button type="button" class="modal-fechar-conta" id="btnFecharModalCompra">✕</button>
+            </div>
+            <div id="modalCompraConteudo"></div>
+        </div>
+    </div>
 
     <script src="script.js" defer></script>
 </body>

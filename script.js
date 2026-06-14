@@ -206,7 +206,7 @@ function criarCardPokemon(pokemon) {
                 </div>
                 <div class="pokemon-footer">
                     <div class="pokemon-preco">${formatarPreco(pokemon.preco)}</div>
-                    <button class="btn-capturar" type="button">CAPTURAR</button>
+                    <button class="btn-secundario" type="button" data-pokemon-id="${pokemon.numero}">CAPTURAR</button>
                 </div>
             </div>
         </div>
@@ -231,7 +231,25 @@ function renderizarFooter() {
         return;
     }
 
-    const footerHtml = `
+    const isRelatorio = window.location.pathname.toLowerCase().indexOf("relatorio.html") !== -1;
+
+    const footerHtml = isRelatorio ? `
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>RELATÓRIOS</h4>
+                    <p>Painel administrativo de clientes e compras.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>ADMINISTRAÇÃO</h4>
+                    <p>Relatórios exclusivos para controle interno da loja.</p>
+                </div>
+            </div>
+            <div class="footer-divisor">
+                <p>© 2026 Rota Grama Alta • Admin Dashboard</p>
+            </div>
+        </div>
+    ` : `
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-section">
@@ -250,6 +268,283 @@ function renderizarFooter() {
     `;
 
     footerContainer.innerHTML = footerHtml;
+}
+
+// Carrinho
+
+function atualizarQuantidadeCarrinho(numeroPokemon, quantidade) {
+    const carrinho = obterCarrinho();
+    const item = carrinho.find(function(carrinhoItem) {
+        return carrinhoItem.numero === numeroPokemon;
+    });
+
+    if (!item) {
+        return;
+    }
+
+    if (quantidade <= 0) {
+        const carrinhoAtualizado = carrinho.filter(function(carrinhoItem) {
+            return carrinhoItem.numero !== numeroPokemon;
+        });
+        salvarCarrinho(carrinhoAtualizado);
+        renderizarCarrinho();
+        return;
+    }
+
+    item.quantidade = quantidade;
+    salvarCarrinho(carrinho);
+    renderizarCarrinho();
+}
+
+function removerPokemonDoCarrinho(numeroPokemon) {
+    const carrinho = obterCarrinho().filter(function(item) {
+        return item.numero !== numeroPokemon;
+    });
+
+    salvarCarrinho(carrinho);
+    renderizarCarrinho();
+}
+
+function renderizarCarrinho() {
+    const main = document.querySelector("main");
+
+    if (!main || window.location.pathname.toLowerCase().indexOf("carrinho.html") === -1) {
+        return;
+    }
+
+    const carrinho = obterCarrinho();
+
+    if (!carrinho.length) {
+        main.innerHTML = `
+            <div class="carrinho-vazio" style="grid-column: 2;">
+                <p>Sua Pokebola está vazia</p>
+                <button class="btn-secundario"><a href="index.html">IR PARA POKEDEX</a></button>
+            </div>
+        `;
+        return;
+    }
+
+    const itensHtml = carrinho.map(function(item) {
+        const subtotal = item.preco * item.quantidade;
+
+        return `
+            <div class="carrinho-item" data-numero="${item.numero}">
+                <img src="${item.imagem}" alt="${item.nome}">
+                <div class="carrinho-item-info">
+                    <div class="carrinho-item-nome">${item.nome}</div>
+                    <div class="carrinho-item-preco">${formatarPreco(item.preco)}</div>
+                </div>
+                <div class="carrinho-item-controles">
+                    <input type="number" min="1" value="${item.quantidade}" data-quantidade-carrinho="${item.numero}">
+                    <button type="button" data-remover-carrinho="${item.numero}">X</button>
+                </div>
+                <div class="carrinho-item-preco">${formatarPreco(subtotal)}</div>
+            </div>
+        `;
+    }).join("");
+
+    const subtotal = carrinho.reduce(function(total, item) {
+        return total + (item.preco * item.quantidade);
+    }, 0);
+
+    main.innerHTML = `
+        <div class="carrinho-grid" style="grid-column: 2; display: grid; gap: 1rem;">
+            <div class="carrinho-lista">
+                ${itensHtml}
+            </div>
+            <button class="btn-secundario btn-continuar-capturando" type="button" id="btnContinuarCapturando">CONTINUAR CAPTURANDO</button>
+            <div class="carrinho-sumario">
+                <div class="sumario-row sumario-total">
+                    <span>Total:</span>
+                    <span>${formatarPreco(subtotal)}</span>
+                </div>
+                <button class="checkout-btn" type="button">FINALIZAR COMPRA</button>
+            </div>
+        </div>
+    `;
+
+    const lista = main.querySelector(".carrinho-lista");
+
+    if (lista) {
+        lista.addEventListener("input", function(event) {
+            const inputQuantidade = event.target.closest("input[data-quantidade-carrinho]");
+
+            if (!inputQuantidade) {
+                return;
+            }
+
+            const numeroPokemon = parseInt(inputQuantidade.getAttribute("data-quantidade-carrinho"), 10);
+            const quantidade = parseInt(inputQuantidade.value, 10);
+
+            if (Number.isNaN(numeroPokemon) || Number.isNaN(quantidade)) {
+                return;
+            }
+
+            atualizarQuantidadeCarrinho(numeroPokemon, quantidade);
+        });
+
+        lista.addEventListener("click", function(event) {
+            const botaoRemover = event.target.closest("button[data-remover-carrinho]");
+
+            if (!botaoRemover) {
+                return;
+            }
+
+            const numeroPokemon = parseInt(botaoRemover.getAttribute("data-remover-carrinho"), 10);
+
+            if (Number.isNaN(numeroPokemon)) {
+                return;
+            }
+
+            removerPokemonDoCarrinho(numeroPokemon);
+        });
+    }
+
+    const botaoContinuar = document.getElementById("btnContinuarCapturando");
+
+    if (botaoContinuar) {
+        botaoContinuar.addEventListener("click", function() {
+            window.location.href = "index.html";
+        });
+    }
+
+    const botaoFinalizar = main.querySelector(".checkout-btn");
+
+    if (botaoFinalizar) {
+        botaoFinalizar.addEventListener("click", function() {
+            const usuario = obterUsuarioLogado();
+
+            if (!usuario) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const carrinhoAtual = obterCarrinho();
+
+            if (!carrinhoAtual.length) {
+                return;
+            }
+
+            const historicoCompras = JSON.parse(localStorage.getItem("historicoCompras") || "[]");
+            const totalCompra = carrinhoAtual.reduce(function(total, item) {
+                return total + (item.preco * item.quantidade);
+            }, 0);
+            const proximoNumero = historicoCompras.length + 1;
+            const itensCompra = carrinhoAtual.map(function(item) {
+                const pokemonOriginal = estoque[item.numero];
+
+                return {
+                    ...pokemonOriginal,
+                    quantidade: item.quantidade
+                };
+            });
+
+            historicoCompras.push({
+                id: `CP${String(proximoNumero).padStart(3, "0")}`,
+                usuarioId: usuario.id,
+                data: new Date().toLocaleDateString("pt-BR"),
+                total: totalCompra,
+                itens: itensCompra
+            });
+
+            localStorage.setItem("historicoCompras", JSON.stringify(historicoCompras));
+            localStorage.removeItem("carrinhoPokemons");
+
+            alert("Compra realizada com sucesso");
+            window.location.href = "conta.html";
+        });
+    }
+}
+
+function obterCarrinho() {
+    const carrinho = localStorage.getItem("carrinhoPokemons");
+    return carrinho ? JSON.parse(carrinho) : [];
+}
+
+function salvarCarrinho(carrinho) {
+    localStorage.setItem("carrinhoPokemons", JSON.stringify(carrinho));
+}
+
+function adicionarPokemonAoCarrinho(pokemon) {
+    const carrinho = obterCarrinho();
+    const itemExistente = carrinho.find(function(item) {
+        return item.numero === pokemon.numero;
+    });
+
+    if (itemExistente) {
+        itemExistente.quantidade += 1;
+    } else {
+        carrinho.push({
+            numero: pokemon.numero,
+            nome: pokemon.nome,
+            imagem: pokemon.imagem,
+            preco: pokemon.preco,
+            quantidade: 1
+        });
+    }
+
+    salvarCarrinho(carrinho);
+}
+
+function obterCapturaPendente() {
+    const pendente = localStorage.getItem("capturaPendente");
+    return pendente ? parseInt(pendente, 10) : null;
+}
+
+function limparCapturaPendente() {
+    localStorage.removeItem("capturaPendente");
+}
+
+function processarCapturaPendente() {
+    const numeroPokemon = obterCapturaPendente();
+
+    if (!numeroPokemon || !estoque[numeroPokemon]) {
+        limparCapturaPendente();
+        return false;
+    }
+
+    adicionarPokemonAoCarrinho(estoque[numeroPokemon]);
+    limparCapturaPendente();
+    return true;
+}
+
+function redirecionarParaLoginComCaptura(numeroPokemon) {
+    localStorage.setItem("capturaPendente", String(numeroPokemon));
+    window.location.href = "login.html";
+}
+
+function capturarPokemon(numeroPokemon) {
+    if (!verificarUsuarioLogado()) {
+        redirecionarParaLoginComCaptura(numeroPokemon);
+        return;
+    }
+
+    adicionarPokemonAoCarrinho(estoque[numeroPokemon]);
+    window.location.href = "carrinho.html";
+}
+
+function inicializarCapturaPokemons() {
+    const grade = document.querySelector(".pokemon-grid");
+
+    if (!grade) {
+        return;
+    }
+
+    grade.addEventListener("click", function(event) {
+        const botao = event.target.closest("button[data-pokemon-id]");
+
+        if (!botao) {
+            return;
+        }
+
+        const numeroPokemon = parseInt(botao.getAttribute("data-pokemon-id"), 10);
+
+        if (Number.isNaN(numeroPokemon)) {
+            return;
+        }
+
+        capturarPokemon(numeroPokemon);
+    });
 }
 
 
@@ -386,11 +681,22 @@ function realizarCadastro(event) {
     usuarios.push(novoUsuario);
     salvarUsuarios(usuarios);
 
+    const capturaPendente = obterCapturaPendente();
 
     document.querySelector("form").reset();
-    alert("Cadastro realizado com sucesso! Você será redirecionado para o login.");
+    alert("Cadastro realizado com sucesso!");
 
-    // Redirecionar para login
+    if (capturaPendente) {
+        localStorage.setItem("usuarioLogado", JSON.stringify(novoUsuario));
+        processarCapturaPendente();
+
+        setTimeout(() => {
+            window.location.href = "carrinho.html";
+        }, 1000);
+
+        return;
+    }
+
     setTimeout(() => {
         window.location.href = "login.html";
     }, 1000);
@@ -398,6 +704,10 @@ function realizarCadastro(event) {
 
 // Inicializar o sistema de cadastro
 function inicializarCadastro() {
+    if (!document.getElementById("confirm-password")) {
+        return;
+    }
+
     const form = document.querySelector("form");
     if (form) {
         form.addEventListener("submit", realizarCadastro);
@@ -411,8 +721,9 @@ function realizarLogin(event) {
 
     const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("password").value;
+    const adminEmail = "admin@ifsc.com";
+    const adminSenha = "admin";
 
-    // Validações
     if (!email) {
         alert("Por favor, insira seu email.");
         return;
@@ -420,6 +731,20 @@ function realizarLogin(event) {
 
     if (!senha) {
         alert("Por favor, insira sua senha.");
+        return;
+    }
+
+    if (email === adminEmail && senha === adminSenha) {
+        localStorage.removeItem("usuarioLogado");
+        localStorage.setItem("adminLogado", JSON.stringify({
+            email: adminEmail,
+            nome: "Administrador"
+        }));
+
+        alert("Bem-vindo, administrador!");
+        setTimeout(function() {
+            window.location.href = "relatorio.html";
+        }, 1000);
         return;
     }
 
@@ -439,7 +764,9 @@ function realizarLogin(event) {
 
 
     localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+    localStorage.removeItem("adminLogado");
     alert(`Bem-vindo, ${usuario.nome}!`);
+    processarCapturaPendente();
 
     setTimeout(() => {
         window.location.href = "carrinho.html";
@@ -447,9 +774,38 @@ function realizarLogin(event) {
 }
 
 function inicializarLogin() {
+    if (document.getElementById("confirm-password")) {
+        return;
+    }
+
     const form = document.querySelector("form");
     if (form) {
         form.addEventListener("submit", realizarLogin);
+    }
+
+    const botaoAdmin = document.getElementById("btnLoginAdmin");
+
+    if (botaoAdmin) {
+        botaoAdmin.addEventListener("click", function() {
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("password").value;
+
+            if (email === "admin@ifsc.com" && senha === "admin") {
+                localStorage.removeItem("usuarioLogado");
+                localStorage.setItem("adminLogado", JSON.stringify({
+                    email: "admin@ifsc.com",
+                    nome: "Administrador"
+                }));
+
+                alert("Bem-vindo, administrador!");
+                setTimeout(function() {
+                    window.location.href = "relatorio.html";
+                }, 1000);
+                return;
+            }
+
+            alert("Credenciais de administrador inválidas.");
+        });
     }
 }
 
@@ -460,6 +816,16 @@ function verificarUsuarioLogado() {
 function obterUsuarioLogado() {
     const usuario = localStorage.getItem("usuarioLogado");
     return usuario ? JSON.parse(usuario) : null;
+}
+
+function verificarAdminLogado() {
+    return localStorage.getItem("adminLogado");
+}
+
+function sairAdmin() {
+    localStorage.removeItem("adminLogado");
+    localStorage.removeItem("usuarioLogado");
+    window.location.href = "login.html";
 }
 
 function salvarUsuarioLogado(usuarioAtualizado) {
@@ -475,6 +841,186 @@ function salvarUsuarioLogado(usuarioAtualizado) {
 
     salvarUsuarios(usuariosAtualizados);
 }
+
+function obterHistoricoCompras() {
+    return JSON.parse(localStorage.getItem("historicoCompras") || "[]");
+}
+
+function obterClientesAdministracao() {
+    return obterUsuarios().filter(function(usuario) {
+        return usuario.email !== "admin@ifsc.com";
+    });
+}
+
+function normalizarTexto(texto) {
+    return String(texto || "").toLowerCase();
+}
+
+function renderizarRelatorioAdmin() {
+    const totalClientes = document.getElementById("totalClientes");
+    const totalComprasAdmin = document.getElementById("totalComprasAdmin");
+    const receitaTotalAdmin = document.getElementById("receitaTotalAdmin");
+    const tbodyClientes = document.getElementById("tbodyClientesAdmin");
+    const tbodyCompras = document.getElementById("tbodyComprasAdmin");
+    const inputCliente = document.getElementById("buscarClienteInput");
+    const filtroCompra = document.getElementById("filtroCompraAdmin");
+    const inputCompra = document.getElementById("buscarCompraInput");
+    const adminLogado = verificarAdminLogado();
+
+    if (!totalClientes) {
+        return;
+    }
+
+    if (!adminLogado) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const clientes = obterClientesAdministracao();
+    const compras = obterHistoricoCompras();
+    let termoCliente = "";
+    let termoCompra = "";
+    let filtroAtual = "todas";
+
+    function renderizarClientes() {
+        const termo = normalizarTexto(termoCliente);
+        const clientesFiltrados = clientes.filter(function(cliente) {
+            if (!termo) {
+                return true;
+            }
+
+            return [cliente.id, cliente.nome, cliente.email, cliente.cpf].some(function(campo) {
+                return normalizarTexto(campo).indexOf(termo) !== -1;
+            });
+        });
+
+        if (tbodyClientes) {
+            tbodyClientes.innerHTML = clientesFiltrados.length ? clientesFiltrados.map(function(cliente) {
+                const totalComprasCliente = compras.filter(function(compra) {
+                    return compra.usuarioId === cliente.id;
+                }).length;
+
+                return `
+                    <tr>
+                        <td>${cliente.id}</td>
+                        <td>${cliente.nome}</td>
+                        <td>${cliente.email}</td>
+                        <td>${cliente.cpf}</td>
+                        <td>${totalComprasCliente}</td>
+                    </tr>
+                `;
+            }).join("") : `
+                <tr>
+                    <td colspan="5" class="empty-message">Nenhum cliente encontrado</td>
+                </tr>
+            `;
+        }
+    }
+
+    function renderizarCompras() {
+        const termo = normalizarTexto(termoCompra);
+        const comprasFiltradas = compras.filter(function(compra) {
+            if (!termo || filtroAtual === "todas") {
+                return true;
+            }
+
+            const cliente = clientes.find(function(item) {
+                return item.id === compra.usuarioId;
+            });
+
+            const itensTexto = compra.itens.map(function(item) {
+                return item.nome;
+            }).join(" ");
+            const totalTexto = formatarPreco(compra.total);
+
+            if (filtroAtual === "id") {
+                return normalizarTexto(compra.id).indexOf(termo) !== -1;
+            }
+
+            if (filtroAtual === "cliente") {
+                return cliente && (
+                    normalizarTexto(cliente.nome).indexOf(termo) !== -1 ||
+                    normalizarTexto(cliente.id).indexOf(termo) !== -1 ||
+                    normalizarTexto(cliente.email).indexOf(termo) !== -1 ||
+                    normalizarTexto(cliente.cpf).indexOf(termo) !== -1
+                );
+            }
+
+            if (filtroAtual === "data") {
+                return normalizarTexto(compra.data).indexOf(termo) !== -1;
+            }
+
+            if (filtroAtual === "valor") {
+                return normalizarTexto(totalTexto).indexOf(termo) !== -1;
+            }
+
+            if (filtroAtual === "produto") {
+                return normalizarTexto(itensTexto).indexOf(termo) !== -1;
+            }
+
+            return true;
+        });
+
+        if (tbodyCompras) {
+            tbodyCompras.innerHTML = comprasFiltradas.length ? comprasFiltradas.map(function(compra) {
+                const cliente = clientes.find(function(item) {
+                    return item.id === compra.usuarioId;
+                });
+                const itensResumo = compra.itens.map(function(item) {
+                    return `${item.quantidade}x ${item.nome}`;
+                }).join(", ");
+
+                return `
+                    <tr>
+                        <td>${compra.id}</td>
+                        <td>${cliente ? cliente.nome : "Cliente removido"}</td>
+                        <td>${compra.data}</td>
+                        <td>${itensResumo}</td>
+                        <td>${formatarPreco(compra.total)}</td>
+                    </tr>
+                `;
+            }).join("") : `
+                <tr>
+                    <td colspan="5" class="empty-message">Nenhuma compra encontrada</td>
+                </tr>
+            `;
+        }
+    }
+
+    if (totalClientes) totalClientes.textContent = clientes.length;
+    if (totalComprasAdmin) totalComprasAdmin.textContent = compras.length;
+    if (receitaTotalAdmin) {
+        receitaTotalAdmin.textContent = formatarPreco(compras.reduce(function(total, compra) {
+            return total + compra.total;
+        }, 0));
+    }
+
+    renderizarClientes();
+    renderizarCompras();
+
+    if (inputCliente) {
+        inputCliente.addEventListener("input", function() {
+            termoCliente = inputCliente.value;
+            renderizarClientes();
+        });
+    }
+
+    if (inputCompra) {
+        inputCompra.addEventListener("input", function() {
+            termoCompra = inputCompra.value;
+            renderizarCompras();
+        });
+    }
+
+    if (filtroCompra) {
+        filtroCompra.addEventListener("change", function() {
+            filtroAtual = filtroCompra.value;
+            renderizarCompras();
+        });
+    }
+}
+
+// Conta
 
 function inicializarBotaoConta() {
     const botaoConta = document.getElementById("btnConta");
@@ -516,6 +1062,146 @@ function renderizarConta() {
     if (elementoId) elementoId.textContent = usuario.id;
     if (totalCompras) totalCompras.textContent = "0";
     if (gastoTotal) gastoTotal.textContent = "R$ 0,00";
+}
+
+function renderizarHistoricoCompras() {
+    const usuario = obterUsuarioLogado();
+    const listaCompras = document.getElementById("listaCompras");
+    const mensagemCompras = document.getElementById("mensagemCompras");
+    const totalCompras = document.getElementById("totalCompras");
+    const gastoTotal = document.getElementById("gastoTotal");
+
+    if (!usuario || !listaCompras || !mensagemCompras || !totalCompras || !gastoTotal) {
+        return;
+    }
+
+    const historicoCompras = obterHistoricoCompras().filter(function(compra) {
+        return compra.usuarioId === usuario.id;
+    });
+
+    if (!historicoCompras.length) {
+        mensagemCompras.style.display = "block";
+        listaCompras.style.display = "none";
+        totalCompras.textContent = "0";
+        gastoTotal.textContent = "R$ 0,00";
+        return;
+    }
+
+    mensagemCompras.style.display = "none";
+    listaCompras.style.display = "block";
+
+    listaCompras.innerHTML = historicoCompras.map(function(compra) {
+        const itensResumo = compra.itens.map(function(item) {
+            return `${item.quantidade}x ${item.nome}`;
+        }).join(", ");
+
+        return `
+            <div class="pokemon-pedido" data-compra-id="${compra.id}">
+                <div>
+                    <div class="id-pedido">${compra.id}</div>
+                    <div class="data-pedido">${compra.data}</div>
+                    <div class="data-pedido">${itensResumo}</div>
+                </div>
+                <div class="valor-pedido">${formatarPreco(compra.total)}</div>
+            </div>
+        `;
+    }).join("");
+
+    totalCompras.textContent = historicoCompras.length;
+    gastoTotal.textContent = formatarPreco(historicoCompras.reduce(function(total, compra) {
+        return total + compra.total;
+    }, 0));
+}
+
+function abrirModalCompra(compra) {
+    const modal = document.getElementById("modalCompra");
+    const conteudo = document.getElementById("modalCompraConteudo");
+
+    if (!modal || !conteudo || !compra) {
+        return;
+    }
+
+    const itensHtml = compra.itens.map(function(item) {
+        const tiposHtml = item.tipos.map(function(tipo) {
+            return `<span class="${tipo.classe}">${tipo.nome}</span>`;
+        }).join("");
+
+        return `
+            <div class="modal-compra-item">
+                <div class="modal-compra-info">
+                    <img class="modal-compra-imagem" src="${item.imagem}" alt="${item.nome}">
+                    <div>
+                        <div class="modal-compra-nome">${item.nome}</div>
+                        <div class="pokemon-tipos" style="margin-bottom: 0.5rem;">${tiposHtml}</div>
+                        <div class="data-pedido">HP: ${item.stats.hp} | ATK: ${item.stats.atk} | DEF: ${item.stats.def}</div>
+                        <div class="data-pedido">${item.quantidade}x ${formatarPreco(item.preco)}</div>
+                    </div>
+                </div>
+                <div class="modal-compra-subtotal">${formatarPreco(item.preco * item.quantidade)}</div>
+            </div>
+        `;
+    }).join("");
+
+    conteudo.innerHTML = `
+        <div class="data-pedido" style="margin-bottom: 1rem;">Compra ${compra.id} • ${compra.data}</div>
+        ${itensHtml}
+        <div class="sumario-row sumario-total" style="margin-top: 1rem;">
+            <span>Total:</span>
+            <span>${formatarPreco(compra.total)}</span>
+        </div>
+    `;
+
+    modal.classList.add("ativo");
+    modal.setAttribute("aria-hidden", "false");
+}
+
+function fecharModalCompra() {
+    const modal = document.getElementById("modalCompra");
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove("ativo");
+    modal.setAttribute("aria-hidden", "true");
+}
+
+function inicializarModalCompras() {
+    const listaCompras = document.getElementById("listaCompras");
+    const btnFechar = document.getElementById("btnFecharModalCompra");
+    const modal = document.getElementById("modalCompra");
+
+    if (listaCompras) {
+        listaCompras.addEventListener("click", function(event) {
+            const itemCompra = event.target.closest("[data-compra-id]");
+
+            if (!itemCompra) {
+                return;
+            }
+
+            const usuario = obterUsuarioLogado();
+            const historicoCompras = obterHistoricoCompras();
+            const compra = historicoCompras.find(function(item) {
+                return item.id === itemCompra.getAttribute("data-compra-id") && item.usuarioId === usuario.id;
+            });
+
+            if (compra) {
+                abrirModalCompra(compra);
+            }
+        });
+    }
+
+    if (btnFechar) {
+        btnFechar.addEventListener("click", fecharModalCompra);
+    }
+
+    if (modal) {
+        modal.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                fecharModalCompra();
+            }
+        });
+    }
 }
 
 function ativarEdicaoConta() {
@@ -598,24 +1284,46 @@ function ativarEdicaoConta() {
 function inicializarConta() {
     if (document.getElementById("contaNome")) {
         renderizarConta();
+        renderizarHistoricoCompras();
+        inicializarModalCompras();
         ativarEdicaoConta();
     }
 
     const botaoSair = document.getElementById("btnSair");
 
     if (botaoSair) {
-        botaoSair.addEventListener("click", function() {
+        botaoSair.addEventListener("click", function(event) {
+            event.preventDefault();
             localStorage.removeItem("usuarioLogado");
+            localStorage.removeItem("adminLogado");
+            window.location.href = "index.html";
         });
     }
 }
 
+function inicializarRelatorioAdmin() {
+    if (!document.getElementById("tbodyClientesAdmin")) {
+        return;
+    }
+
+    renderizarRelatorioAdmin();
+
+    const botaoSairAdmin = document.getElementById("btnSairAdmin");
+
+    if (botaoSairAdmin) {
+        botaoSairAdmin.addEventListener("click", function() {
+            sairAdmin();
+        });
+    }
+}
 
 // Inicializa
 
 document.addEventListener("DOMContentLoaded", renderizarPokemons);
 document.addEventListener("DOMContentLoaded", renderizarFooter);
+document.addEventListener("DOMContentLoaded", renderizarCarrinho);
 document.addEventListener("DOMContentLoaded", inicializarCadastro);
 document.addEventListener("DOMContentLoaded", inicializarLogin);
 document.addEventListener("DOMContentLoaded", inicializarBotaoConta);
 document.addEventListener("DOMContentLoaded", inicializarConta);
+document.addEventListener("DOMContentLoaded", inicializarCapturaPokemons);

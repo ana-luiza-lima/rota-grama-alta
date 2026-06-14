@@ -102,6 +102,7 @@ button.btn-capturar {
     cursor: pointer;
 }
 
+
 /* ///////////////////////////////////////////////////Navegação */
 nav {
     background-color: var(--verdefolha);
@@ -597,11 +598,20 @@ footer p {
 }
 
 .checkout-btn {
-    width: 100%;
+    width: 20%;
     background: linear-gradient(135deg,var(--verdefolha) 0%, #1a6b1a 100%);
     color: #FFFFFF;
     margin-top: 1rem;
     padding: 0.75rem;
+    margin-left: auto;
+    display: block;
+}
+
+#btnContinuarCapturando {
+    width: 20%;
+    margin-top: 1rem;
+    margin-left: auto;
+    display: block;
 }
 
 
@@ -735,6 +745,88 @@ main > .content-grid > div:last-child button {
     color: var(--verdefolha);
 }
 
+.pokemon-pedido {
+    cursor: pointer;
+}
+
+.pokemon-pedido:hover {
+    background: #E8F5E9;
+}
+
+.modal-overlay-conta {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-overlay-conta.ativo {
+    display: flex;
+}
+
+.modal-conteudo-conta {
+    background: #F1F8E9;
+    border: 4px solid #000000;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.35);
+    width: min(720px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+    padding: 1.5rem;
+}
+
+.modal-header-conta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--verdemusgo);
+}
+
+.modal-fechar-conta {
+    width: auto;
+    padding: 0.25rem 0.5rem;
+}
+
+.modal-compra-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--verdemusgo);
+}
+
+.modal-compra-item:last-child {
+    border-bottom: 0;
+}
+
+.modal-compra-info {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.modal-compra-imagem {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.modal-compra-nome {
+    font-weight: bold;
+}
+
+.modal-compra-quantidade,
+.modal-compra-subtotal {
+    font-weight: bold;
+}
+
 
 /* Login/cadastro Container */
 
@@ -812,6 +904,52 @@ main > .content-grid > div:last-child button {
 
 .divisor a:hover {
     text-decoration: underline;
+}
+
+.divisor-link {
+    margin-top: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--verdefolha);
+    font: inherit;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.divisor-link:hover {
+    color: var(--verdegrama);
+}
+
+/* ////////////////////////////////////////////////////Relatórios Admin */
+
+.search-card + .search-card {
+    margin-top: 1rem;
+}
+
+#buscarClienteInput,
+#buscarCompraInput,
+#filtroCompraAdmin {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--verdemusgo);
+    background: #FFFFFF;
+    color: var(--verdegrama);
+    font-family: inherit;
+}
+
+.modal-compra-info {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.modal-compra-imagem {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .test-info {
