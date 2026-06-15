@@ -316,8 +316,8 @@ function renderizarCarrinho() {
         main.innerHTML = `
             <div class="carrinho-vazio carrinho-coluna-central">
                 <p>Sua Pokebola está vazia</p>
-                <button class="btn-secundario"><a href="index.html">IR PARA PÁGINA INICIAL</a></button>
-            </div>
+                <button class="btn-secundario" id="btnPokedex" type="button">IR PARA POKEDEX</button>
+</div>
         `;
         return;
     }
@@ -1318,3 +1318,46 @@ document.addEventListener("DOMContentLoaded", inicializarBotaoConta);
 document.addEventListener("DOMContentLoaded", inicializarConta);
 document.addEventListener("DOMContentLoaded", inicializarRelatorioAdmin);
 document.addEventListener("DOMContentLoaded", inicializarCapturaPokemons);
+
+
+
+///////////////botões
+
+const btnSobre = document.getElementById("btnSobre");
+if (btnSobre) {
+    btnSobre.addEventListener("click", function () {
+        window.location.href = "sobre.html";
+    });
+}
+
+const btnConta = document.getElementById("btnConta");
+if (btnConta) {
+    btnConta.addEventListener("click", function () {
+        window.location.href = "conta.html";
+    });
+}
+
+const btnCarrinho = document.getElementById("btnCarrinho");
+if (btnCarrinho) {
+    btnCarrinho.addEventListener("click", function () {
+        window.location.href = "carrinho.html";
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btnVoltar = document.getElementById("btnVoltar");
+    if (btnVoltar) {
+        btnVoltar.addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+    }
+
+    const btnPokedex = document.getElementById("btnPokedex");
+    if (btnPokedex) {
+        btnPokedex.addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+    }
+
+});
