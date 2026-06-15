@@ -627,7 +627,6 @@ body.footer-ancorado .carrinho-vazio {
 }
 
 .checkout-btn {
-    width: 20%;
     background: linear-gradient(135deg,var(--verdefolha) 0%, #1a6b1a 100%);
     color: #FFFFFF;
     margin-top: 1rem;
@@ -637,7 +636,6 @@ body.footer-ancorado .carrinho-vazio {
 }
 
 #btnContinuarCapturando {
-    width: 20%;
     margin-top: 1rem;
     margin-left: auto;
     display: block;
