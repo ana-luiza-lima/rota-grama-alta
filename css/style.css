@@ -6,6 +6,8 @@
     padding: 0;
 }
 html {
+
+    box-sizing: border-box;
     --verdegrama: #1B5E20;
     --verdefolha: #228B22;
     --verdemusgo: #558B2F;
@@ -440,23 +442,34 @@ body.footer-ancorado main {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.25rem;
     margin-bottom: 0.75rem;
-    font-size: 0.7rem;
+    font-size: 1rem;
 }
 
 .stat-box {
     border: 2px solid var(--verdemusgo);
-    padding: 0.25rem;
+    padding: 0.2rem;
     text-align: center;
     background: #E8F5E9;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 2.6rem;
+    gap: 0.1rem;
+    min-height: 2.7rem;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .stat-etiqueta {
     font-weight: bold;
     color:  var(--verdegrama);
+}
+
+.pokemon-stats .stat-value {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--verdefolha);
+    line-height: 1.05;
 }
 
 .pokemon-footer {
@@ -997,7 +1010,7 @@ main > .content-grid > div:last-child button {
     margin-bottom: 0.5rem;
 }
 
-.stat-value {
+.stat-card .stat-value {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--verdefolha);
@@ -1114,6 +1127,7 @@ tbody tr:hover {
     transition: all 0.3s;
 }
 
+
 .porque-nos-card:hover {
     background-color: rgba(255, 215, 0, 0.1);
     transform: scale(1.05);
@@ -1125,10 +1139,11 @@ tbody tr:hover {
 }
 
 .porque-nos-titulo {
-    font-size: 16px;
+    font-size: 13px;
     margin-bottom: 10px;
     text-transform: uppercase;
 }
+
 
 .porque-nos-texto {
     line-height: 1.5;

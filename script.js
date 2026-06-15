@@ -318,8 +318,8 @@ function renderizarCarrinho() {
         main.innerHTML = `
             <div class="carrinho-vazio" style="grid-column: 2;">
                 <p>Sua Pokebola está vazia</p>
-                <button class="btn-secundario"><a href="index.html">IR PARA POKEDEX</a></button>
-            </div>
+                <button class="btn-secundario" id="btnPokedex" type="button">IR PARA POKEDEX</button>
+</div>
         `;
         return;
     }
@@ -1333,18 +1333,26 @@ document.addEventListener("DOMContentLoaded", inicializarCapturaPokemons);
 
 ///////////////botões
 
+const btnSobre = document.getElementById("btnSobre");
+if (btnSobre) {
+    btnSobre.addEventListener("click", function () {
+        window.location.href = "sobre.html";
+    });
+}
 
-document.getElementById("btnSobre").addEventListener("click", function () {
-    window.location.href = "sobre.html";
-});
+const btnConta = document.getElementById("btnConta");
+if (btnConta) {
+    btnConta.addEventListener("click", function () {
+        window.location.href = "conta.html";
+    });
+}
 
-document.getElementById("btnConta").addEventListener("click", function () {
-    window.location.href = "conta.html";
-});
-
-document.getElementById("btnCarrinho").addEventListener("click", function () {
-    window.location.href = "carrinho.html";
-});
+const btnCarrinho = document.getElementById("btnCarrinho");
+if (btnCarrinho) {
+    btnCarrinho.addEventListener("click", function () {
+        window.location.href = "carrinho.html";
+    });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -1362,8 +1370,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-});
-
-document.getElementById("btnVoltar").addEventListener("click", function () {
-    window.location.href = "index.html";
 });
