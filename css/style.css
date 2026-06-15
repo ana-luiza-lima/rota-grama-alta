@@ -1179,6 +1179,52 @@ tbody tr:hover {
     align-items: center;
 }
 
+.sobre-logo {
+    margin-bottom: 1rem;
+}
+
+.sobre-logo img {
+    width: min(200em, 100%);
+    height: auto;
+}
+
+.form-contato-sobre {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-contato-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-contato-campo label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+    color: var(--verdegrama);
+}
+
+.form-contato-campo input,
+.form-contato-campo textarea {
+    width: 100%;
+    border: 2px solid var(--verdemusgo);
+    background: #FFFFFF;
+    color: var(--verdegrama);
+    font-family: inherit;
+    padding: 0.75rem;
+}
+
+.form-contato-campo textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-contato-sobre button {
+    justify-self: start;
+}
+
 /* //////////////////////POR QUE NOS */
 
 .porque-nos-grid {
