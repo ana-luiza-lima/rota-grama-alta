@@ -726,6 +726,7 @@ main > .content-grid > div:last-child button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 
 .id-pedido{
@@ -766,9 +767,6 @@ main > .content-grid > div:last-child button {
     color: var(--verdefolha);
 }
 
-.pokemon-pedido {
-    cursor: pointer;
-}
 
 .pokemon-pedido:hover {
     background: #E8F5E9;
@@ -967,18 +965,6 @@ main > .content-grid > div:last-child button {
     height: 72px;
     object-fit: contain;
     flex-shrink: 0;
-}
-
-.test-info {
-    background: #8B7355;
-    border: 2px solid var(--verdemusgo);
-    padding: 0.75rem;
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 0.75rem;
-    color: #FFFFFF;
-    font-weight: bold;
-    font-family: 'Press Start 2P', sans-serif;
 }
 
 .back-link {

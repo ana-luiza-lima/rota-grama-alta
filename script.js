@@ -1326,4 +1326,5 @@ document.addEventListener("DOMContentLoaded", inicializarCadastro);
 document.addEventListener("DOMContentLoaded", inicializarLogin);
 document.addEventListener("DOMContentLoaded", inicializarBotaoConta);
 document.addEventListener("DOMContentLoaded", inicializarConta);
+document.addEventListener("DOMContentLoaded", inicializarRelatorioAdmin);
 document.addEventListener("DOMContentLoaded", inicializarCapturaPokemons);
