@@ -1328,3 +1328,20 @@ document.addEventListener("DOMContentLoaded", inicializarBotaoConta);
 document.addEventListener("DOMContentLoaded", inicializarConta);
 document.addEventListener("DOMContentLoaded", inicializarRelatorioAdmin);
 document.addEventListener("DOMContentLoaded", inicializarCapturaPokemons);
+
+
+
+///////////////botões
+
+
+document.getElementById("btnSobre").addEventListener("click", function () {
+    window.location.href = "sobre.html";
+});
+
+document.getElementById("btnConta").addEventListener("click", function () {
+    window.location.href = "conta.html";
+});
+
+document.getElementById("btnCarrinho").addEventListener("click", function () {
+    window.location.href = "carrinho.html";
+});
