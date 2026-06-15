@@ -98,17 +98,6 @@ button.btn-accent {
     border-color: #FFFFFF #000000 #000000 #FFFFFF;
 }
 
-button.btn-capturar {
-    background: linear-gradient(135deg, var(--verdefolha), 0%, #1a6b1a 100%);
-    color: #FFFFFF;
-    border: 2px solid #FFFFFF;
-    padding: 0.4rem 0.6rem;
-    font-size: 0.65rem;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-
 /* ///////////////////////////////////////////////////Navegação */
 nav {
     background-color: var(--verdefolha);
@@ -181,6 +170,7 @@ body.footer-ancorado main {
     font-size: 1.75rem;
     color: var(--verdegrama);
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .section-divisor {
@@ -189,6 +179,12 @@ body.footer-ancorado main {
     background: var(--verdefolha);
     border: 2px solid var(--verdemusgo);
     margin-bottom: 1rem;
+}
+
+.page-sobre .section-divisor {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 2rem;
 }
 
 .section-subtitulo {
@@ -452,16 +448,15 @@ body.footer-ancorado main {
     padding: 0.25rem;
     text-align: center;
     background: #E8F5E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.6rem;
 }
 
 .stat-etiqueta {
     font-weight: bold;
     color:  var(--verdegrama);
-}
-
-.stat-value {
-    color: var(--verdefolha);
-    font-weight: bold;
 }
 
 .pokemon-footer {
@@ -991,7 +986,7 @@ main > .content-grid > div:last-child button {
 .stat-card {
     background: #F1F8E9;
     border: 3px solid #000000;
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: center;
 }
 
@@ -1003,7 +998,7 @@ main > .content-grid > div:last-child button {
 }
 
 .stat-value {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: var(--verdefolha);
 }
@@ -1073,4 +1068,68 @@ tbody tr:hover {
 .action-buttons {
     display: flex;
     gap: 0.5rem;
+}
+
+
+
+
+
+
+/*///////////////////////////////////SOBRE*/
+
+.sobre-texto {
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.sobre-p {
+    margin-bottom: 15px;
+    text-align: justify;
+    line-height: 1.8;
+    padding: 0 0 15px 0;
+    text-indent: 30px;
+}
+
+.sobre-gif {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* //////////////////////POR QUE NOS */
+
+.porque-nos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.porque-nos-card {
+    background-color: white;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.porque-nos-card:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+    transform: scale(1.05);
+}
+
+.porque-nos-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.porque-nos-titulo {
+    font-size: 16px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.porque-nos-texto {
+    line-height: 1.5;
 }
