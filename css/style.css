@@ -547,6 +547,15 @@ body.footer-ancorado .carrinho-vazio {
     margin-bottom: 1rem;
 }
 
+.carrinho-coluna-central {
+    grid-column: 2;
+}
+
+.carrinho-grid {
+    display: grid;
+    gap: 1rem;
+}
+
 .carrinho-item {
     background: #F1F8E9;
     border: 2px solid var(--verdemusgo);
@@ -832,6 +841,10 @@ main > .content-grid > div:last-child button {
     flex-shrink: 0;
 }
 
+.pokemon-tipos-modal {
+    margin-bottom: 0.5rem;
+}
+
 .modal-compra-nome {
     font-weight: bold;
 }
@@ -839,6 +852,14 @@ main > .content-grid > div:last-child button {
 .modal-compra-quantidade,
 .modal-compra-subtotal {
     font-weight: bold;
+}
+
+.modal-compra-cabecalho {
+    margin-bottom: 1rem;
+}
+
+.modal-compra-total {
+    margin-top: 1rem;
 }
 
 
@@ -976,6 +997,10 @@ main > .content-grid > div:last-child button {
 
 /* ////////////////////////////////////////////////////Relatórios */
 
+.relatorio-main {
+    grid-template-columns: minmax(0, 1fr);
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1028,7 +1053,7 @@ main > .content-grid > div:last-child button {
 .table-card {
     background: #F1F8E9;
     border: 3px solid #000000;
-    overflow: hidden;
+    overflow-x: auto;
 }
 
 table {

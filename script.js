@@ -237,25 +237,7 @@ function renderizarFooter() {
         return;
     }
 
-    const isRelatorio = window.location.pathname.toLowerCase().indexOf("relatorio.html") !== -1;
-
-    const footerHtml = isRelatorio ? `
-        <div class="footer-container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h4>RELATÓRIOS</h4>
-                    <p>Painel administrativo de clientes e compras.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>ADMINISTRAÇÃO</h4>
-                    <p>Relatórios exclusivos para controle interno da loja.</p>
-                </div>
-            </div>
-            <div class="footer-divisor">
-                <p>© 2026 Rota Grama Alta • Admin Dashboard</p>
-            </div>
-        </div>
-    ` : `
+    const footerHtml = `
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-section">
@@ -332,7 +314,7 @@ function renderizarCarrinho() {
 
     if (!carrinho.length) {
         main.innerHTML = `
-            <div class="carrinho-vazio" style="grid-column: 2;">
+            <div class="carrinho-vazio carrinho-coluna-central">
                 <p>Sua Pokebola está vazia</p>
                 <button class="btn-secundario"><a href="index.html">IR PARA PÁGINA INICIAL</a></button>
             </div>
@@ -364,7 +346,7 @@ function renderizarCarrinho() {
     }, 0);
 
     main.innerHTML = `
-        <div class="carrinho-grid" style="grid-column: 2; display: grid; gap: 1rem;">
+        <div class="carrinho-grid carrinho-coluna-central">
             <div class="carrinho-lista">
                 ${itensHtml}
             </div>
@@ -491,7 +473,6 @@ function adicionarPokemonAoCarrinho(pokemon) {
             quantidade: 1
         });
     }
-
     salvarCarrinho(carrinho);
 }
 
@@ -652,7 +633,7 @@ function realizarCadastro(event) {
     }
 
     if (!validarCPF(cpf)) {
-        alert("CPF inválido. Insira um CPF válido (11 dígitos).");
+        alert("CPF inválido. Insira um CPF válido.");
         return;
     }
 
@@ -747,10 +728,10 @@ function realizarLogin(event) {
         localStorage.removeItem("usuarioLogado");
         localStorage.setItem("adminLogado", JSON.stringify({
             email: adminEmail,
-            nome: "Administrador"
+            nome: "Administradora"
         }));
 
-        alert("Bem-vindo, administrador!");
+        alert("Bem-vinda, administradora!");
         setTimeout(() => {
             window.location.href = "relatorio.html";
         }, 1000);
@@ -803,17 +784,17 @@ function inicializarLogin() {
                 localStorage.removeItem("usuarioLogado");
                 localStorage.setItem("adminLogado", JSON.stringify({
                     email: "admin@ifsc.com",
-                    nome: "Administrador"
+                    nome: "Administradora"
                 }));
 
-                alert("Bem-vindo, administrador!");
+                alert("Bem-vinda, administradora!");
                 setTimeout(() => {
                     window.location.href = "relatorio.html";
                 }, 1000);
                 return;
             }
 
-            alert("Credenciais de administrador inválidas.");
+            alert("Credenciais de administradora inválidas.");
         });
     }
 }
@@ -899,7 +880,7 @@ function renderizarRelatorioAdmin() {
             }
 
             return [cliente.id, cliente.nome, cliente.email, cliente.cpf].some((campo) => {
-                return normalizarTexto(campo).indexOf(termo) !== -1;
+                return normalizarTexto(campo).includes(termo);
             });
         });
 
@@ -943,28 +924,28 @@ function renderizarRelatorioAdmin() {
             const totalTexto = formatarPreco(compra.total);
 
             if (filtroAtual === "id") {
-                return normalizarTexto(compra.id).indexOf(termo) !== -1;
+                return normalizarTexto(compra.id).includes(termo);
             }
 
             if (filtroAtual === "cliente") {
                 return cliente && (
-                    normalizarTexto(cliente.nome).indexOf(termo) !== -1 ||
-                    normalizarTexto(cliente.id).indexOf(termo) !== -1 ||
-                    normalizarTexto(cliente.email).indexOf(termo) !== -1 ||
-                    normalizarTexto(cliente.cpf).indexOf(termo) !== -1
+                    normalizarTexto(cliente.nome).includes(termo) ||
+                    normalizarTexto(cliente.id).includes(termo) ||
+                    normalizarTexto(cliente.email).includes(termo) ||
+                    normalizarTexto(cliente.cpf).includes(termo)
                 );
             }
 
             if (filtroAtual === "data") {
-                return normalizarTexto(compra.data).indexOf(termo) !== -1;
+                return normalizarTexto(compra.data).includes(termo);
             }
 
             if (filtroAtual === "valor") {
-                return normalizarTexto(totalTexto).indexOf(termo) !== -1;
+                return normalizarTexto(totalTexto).includes(termo);
             }
 
             if (filtroAtual === "produto") {
-                return normalizarTexto(itensTexto).indexOf(termo) !== -1;
+                return normalizarTexto(itensTexto).includes(termo);
             }
 
             return true;
@@ -1141,7 +1122,7 @@ function abrirModalCompra(compra) {
                     <img class="modal-compra-imagem" src="${item.imagem}" alt="${item.nome}">
                     <div>
                         <div class="modal-compra-nome">${item.nome}</div>
-                        <div class="pokemon-tipos" style="margin-bottom: 0.5rem;">${tiposHtml}</div>
+                        <div class="pokemon-tipos pokemon-tipos-modal">${tiposHtml}</div>
                         <div class="data-pedido">HP: ${item.stats.hp} | ATK: ${item.stats.atk} | DEF: ${item.stats.def}</div>
                         <div class="data-pedido">${item.quantidade}x ${formatarPreco(item.preco)}</div>
                     </div>
@@ -1152,9 +1133,9 @@ function abrirModalCompra(compra) {
     }).join("");
 
     conteudo.innerHTML = `
-        <div class="data-pedido" style="margin-bottom: 1rem;">Compra ${compra.id} • ${compra.data}</div>
+        <div class="data-pedido modal-compra-cabecalho">Compra ${compra.id} • ${compra.data}</div>
         ${itensHtml}
-        <div class="sumario-row sumario-total" style="margin-top: 1rem;">
+        <div class="sumario-row sumario-total modal-compra-total">
             <span>Total:</span>
             <span>${formatarPreco(compra.total)}</span>
         </div>
