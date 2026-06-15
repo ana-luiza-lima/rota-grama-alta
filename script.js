@@ -1,8 +1,10 @@
+// json de estoque
+
 const estoque = {
     1: {
         numero: 1,
         nome: "Bulbassauro",
-        imagem: "img/1.png",
+        imagem: "media/img/1.png",
         tipos: [
             { "nome": "Planta", "classe": "etiqueta-planta" },
             { "nome": "Veneno", "classe": "etiqueta-veneno" }
@@ -17,7 +19,7 @@ const estoque = {
     4: {
         numero: 4,
         nome: "Charmander",
-        imagem: "img/4.png",
+        imagem: "media/img/4.png",
         tipos: [
             { "nome": "Fogo", "classe": "etiqueta-fogo" }
         ],
@@ -31,7 +33,7 @@ const estoque = {
     7: {
         numero: 7,
         nome: "Squirtle",
-        imagem: "img/7.png",
+        imagem: "media/img/7.png",
         tipos: [
             { "nome": "Água", "classe": "etiqueta-agua" }
         ],
@@ -45,7 +47,7 @@ const estoque = {
     18: {
         numero: 18,
         nome: "Pidgeot",
-        imagem: "img/18.png",
+        imagem: "media/img/18.png",
         tipos: [
             { "nome": "Normal", "classe": "etiqueta-normal" },
             { "nome": "Voador", "classe": "etiqueta-voador" }
@@ -60,7 +62,7 @@ const estoque = {
     25: {
         numero: 25,
         nome: "Pikachu",
-        imagem: "img/25.png",
+        imagem: "media/img/25.png",
         tipos: [
             { "nome": "Elétrico", "classe": "etiqueta-eletrico" }
         ],
@@ -74,7 +76,7 @@ const estoque = {
     39: {
         numero: 39,
         nome: "Jigglypuff",
-        imagem: "img/39.png",
+        imagem: "media/img/39.png",
         tipos: [
             { "nome": "Normal", "classe": "etiqueta-normal" },
             { "nome": "Fada", "classe": "etiqueta-fada" }
@@ -89,7 +91,7 @@ const estoque = {
     52: {
         numero: 52,
         nome: "Meowth",
-        imagem: "img/52.png",
+        imagem: "media/img/52.png",
         tipos: [
             { "nome": "Normal", "classe": "etiqueta-normal" }
         ],
@@ -103,7 +105,7 @@ const estoque = {
     58: {
         numero: 58,
         nome: "Growlithe",
-        imagem: "img/58.png",
+        imagem: "media/img/58.png",
         tipos: [
             { "nome": "Fogo", "classe": "etiqueta-fogo" }
         ],
@@ -117,7 +119,7 @@ const estoque = {
     63: {
         numero: 63,
         nome: "Abra",
-        imagem: "img/63.png",
+        imagem: "media/img/63.png",
         tipos: [
             { "nome": "Psiquico", "classe": "etiqueta-psiquico" }
         ],
@@ -131,7 +133,7 @@ const estoque = {
     83: {
         numero: 83,
         nome: "Farfetch’d",
-        imagem: "img/83.png",
+        imagem: "media/img/83.png",
         tipos: [
             { "nome": "Normal", "classe": "etiqueta-normal" },
             { "nome": "Voador", "classe": "etiqueta-voador" }
@@ -146,7 +148,7 @@ const estoque = {
     94: {
         numero: 94,
         nome: "Gengar",
-        imagem: "img/94.png",
+        imagem: "media/img/94.png",
         tipos: [
             { "nome": "Fantasma", "classe": "etiqueta-fantasma" },
             { "nome": "Veneno", "classe": "etiqueta-veneno" }
@@ -161,7 +163,7 @@ const estoque = {
     132: {
         numero: 132,
         nome: "Ditto",
-        imagem: "img/132.png",
+        imagem: "media/img/132.png",
         tipos: [
             { "nome": "Normal", "classe": "etiqueta-normal" }
         ],
@@ -174,12 +176,14 @@ const estoque = {
     }
 }
 // ------------------------------------------------
-function formatarPreco(valor) {
-    return valor.toLocaleString("pt-BR", {
+
+// Renderiza os pokemons
+const formatarPreco = (valor) => {
+    return valor.toLocaleString("pt-BR", { // .toLocaleString formata o valor para o estilo de formatação da moeda brasileira
         style: "currency",
         currency: "BRL"
     });
-}
+};
 
 function criarCardPokemon(pokemon) {
     const tiposHtml = pokemon.tipos
@@ -223,6 +227,8 @@ function renderizarPokemons() {
     const pokemons = Object.values(estoque);
     grade.innerHTML = pokemons.map(criarCardPokemon).join("");
 }
+
+// Footer
 
 function renderizarFooter() {
     const footerContainer = document.querySelector("footer");
@@ -272,32 +278,17 @@ function renderizarFooter() {
 
 // Carrinho
 
-function atualizarQuantidadeCarrinho(numeroPokemon, quantidade) {
-    const carrinho = obterCarrinho();
-    const item = carrinho.find(function(carrinhoItem) {
-        return carrinhoItem.numero === numeroPokemon;
-    });
+const obterCarrinho = () => {
+    const carrinho = localStorage.getItem("carrinhoPokemons");
+    return carrinho ? JSON.parse(carrinho) : [];
+};
 
-    if (!item) {
-        return;
-    }
-
-    if (quantidade <= 0) {
-        const carrinhoAtualizado = carrinho.filter(function(carrinhoItem) {
-            return carrinhoItem.numero !== numeroPokemon;
-        });
-        salvarCarrinho(carrinhoAtualizado);
-        renderizarCarrinho();
-        return;
-    }
-
-    item.quantidade = quantidade;
-    salvarCarrinho(carrinho);
-    renderizarCarrinho();
-}
+const salvarCarrinho = (carrinho) => {
+    localStorage.setItem("carrinhoPokemons", JSON.stringify(carrinho));
+};
 
 function removerPokemonDoCarrinho(numeroPokemon) {
-    const carrinho = obterCarrinho().filter(function(item) {
+    const carrinho = obterCarrinho().filter((item) => {
         return item.numero !== numeroPokemon;
     });
 
@@ -305,10 +296,35 @@ function removerPokemonDoCarrinho(numeroPokemon) {
     renderizarCarrinho();
 }
 
+function atualizarQuantidadeCarrinho(numeroPokemon, quantidade) {
+    if (quantidade <= 0) {
+        removerPokemonDoCarrinho(numeroPokemon);
+        return;
+    }
+    const carrinho = obterCarrinho();
+    const item = carrinho.find((carrinhoItem) => {
+        return carrinhoItem.numero === numeroPokemon;
+    });
+    if (item) {
+        item.quantidade = quantidade;
+        salvarCarrinho(carrinho);
+        renderizarCarrinho();
+    }
+}
+
+const tocarSomCompra = async () => {
+    try {
+        const som = new Audio("/media/audio/Caught a Pokemon!  Sound Effect.mp3");
+        await som.play();
+    } catch (erro) {
+    }
+};
+
+
 function renderizarCarrinho() {
     const main = document.querySelector("main");
 
-    if (!main || window.location.pathname.toLowerCase().indexOf("carrinho.html") === -1) {
+    if (!main || window.location.pathname.toLowerCase().indexOf("carrinho.html") === -1) { //
         return;
     }
 
@@ -324,7 +340,7 @@ function renderizarCarrinho() {
         return;
     }
 
-    const itensHtml = carrinho.map(function(item) {
+    const itensHtml = carrinho.map((item) => {
         const subtotal = item.preco * item.quantidade;
 
         return `
@@ -343,7 +359,7 @@ function renderizarCarrinho() {
         `;
     }).join("");
 
-    const subtotal = carrinho.reduce(function(total, item) {
+    const subtotal = carrinho.reduce((total, item) => {
         return total + (item.preco * item.quantidade);
     }, 0);
 
@@ -366,7 +382,7 @@ function renderizarCarrinho() {
     const lista = main.querySelector(".carrinho-lista");
 
     if (lista) {
-        lista.addEventListener("input", function(event) {
+        lista.addEventListener("input", (event) => {
             const inputQuantidade = event.target.closest("input[data-quantidade-carrinho]");
 
             if (!inputQuantidade) {
@@ -383,7 +399,7 @@ function renderizarCarrinho() {
             atualizarQuantidadeCarrinho(numeroPokemon, quantidade);
         });
 
-        lista.addEventListener("click", function(event) {
+        lista.addEventListener("click", (event) => {
             const botaoRemover = event.target.closest("button[data-remover-carrinho]");
 
             if (!botaoRemover) {
@@ -403,7 +419,7 @@ function renderizarCarrinho() {
     const botaoContinuar = document.getElementById("btnContinuarCapturando");
 
     if (botaoContinuar) {
-        botaoContinuar.addEventListener("click", function() {
+        botaoContinuar.addEventListener("click", () => {
             window.location.href = "index.html";
         });
     }
@@ -411,7 +427,7 @@ function renderizarCarrinho() {
     const botaoFinalizar = main.querySelector(".checkout-btn");
 
     if (botaoFinalizar) {
-        botaoFinalizar.addEventListener("click", function() {
+        botaoFinalizar.addEventListener("click", async () => {
             const usuario = obterUsuarioLogado();
 
             if (!usuario) {
@@ -426,11 +442,11 @@ function renderizarCarrinho() {
             }
 
             const historicoCompras = JSON.parse(localStorage.getItem("historicoCompras") || "[]");
-            const totalCompra = carrinhoAtual.reduce(function(total, item) {
+            const totalCompra = carrinhoAtual.reduce((total, item) => {
                 return total + (item.preco * item.quantidade);
             }, 0);
             const proximoNumero = historicoCompras.length + 1;
-            const itensCompra = carrinhoAtual.map(function(item) {
+            const itensCompra = carrinhoAtual.map((item) => {
                 const pokemonOriginal = estoque[item.numero];
 
                 return {
@@ -449,25 +465,18 @@ function renderizarCarrinho() {
 
             localStorage.setItem("historicoCompras", JSON.stringify(historicoCompras));
             localStorage.removeItem("carrinhoPokemons");
-
+            
+            await tocarSomCompra();
             alert("Compra realizada com sucesso");
             window.location.href = "conta.html";
         });
     }
 }
 
-function obterCarrinho() {
-    const carrinho = localStorage.getItem("carrinhoPokemons");
-    return carrinho ? JSON.parse(carrinho) : [];
-}
-
-function salvarCarrinho(carrinho) {
-    localStorage.setItem("carrinhoPokemons", JSON.stringify(carrinho));
-}
 
 function adicionarPokemonAoCarrinho(pokemon) {
     const carrinho = obterCarrinho();
-    const itemExistente = carrinho.find(function(item) {
+    const itemExistente = carrinho.find((item) => {
         return item.numero === pokemon.numero;
     });
 
@@ -486,14 +495,14 @@ function adicionarPokemonAoCarrinho(pokemon) {
     salvarCarrinho(carrinho);
 }
 
-function obterCapturaPendente() {
+const obterCapturaPendente = () => {
     const pendente = localStorage.getItem("capturaPendente");
     return pendente ? parseInt(pendente, 10) : null;
-}
+};
 
-function limparCapturaPendente() {
+const limparCapturaPendente = () => {
     localStorage.removeItem("capturaPendente");
-}
+};
 
 function processarCapturaPendente() {
     const numeroPokemon = obterCapturaPendente();
@@ -508,10 +517,10 @@ function processarCapturaPendente() {
     return true;
 }
 
-function redirecionarParaLoginComCaptura(numeroPokemon) {
+const redirecionarParaLoginComCaptura = (numeroPokemon) => {
     localStorage.setItem("capturaPendente", String(numeroPokemon));
     window.location.href = "login.html";
-}
+};
 
 function capturarPokemon(numeroPokemon) {
     if (!verificarUsuarioLogado()) {
@@ -530,7 +539,7 @@ function inicializarCapturaPokemons() {
         return;
     }
 
-    grade.addEventListener("click", function(event) {
+    grade.addEventListener("click", (event) => {
         const botao = event.target.closest("button[data-pokemon-id]");
 
         if (!botao) {
@@ -550,10 +559,10 @@ function inicializarCapturaPokemons() {
 
 // Cadastro de usuário
 
-function validarEmail(email) {
+const validarEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email); // .test para verificar se o email é válido
-}
+};
 
 function validarCPF(cpf) {
     const cpfLimpo = cpf.replace(/\D/g, "");
@@ -579,23 +588,23 @@ function validarCPF(cpf) {
     return true;
 }
 
-function validarSenha(senha) {
+const validarSenha = (senha) => {
     return senha.length >= 6;
-}
+};
 
-function obterUsuarios() {
+const obterUsuarios = () => {
     const usuarios = localStorage.getItem("usuarios");
     return usuarios ? JSON.parse(usuarios) : [];
-}
+};
 
-function salvarUsuarios(usuarios) {
+const salvarUsuarios = (usuarios) => {
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
-}
+};
 
-function usuarioJaExiste(cpf) {
+const usuarioJaExiste = (cpf) => {
     const usuarios = obterUsuarios();
     return usuarios.some(u => u.cpf === cpf);
-}
+};
 
 function gerarIDUsuario() {
     const usuarios = obterUsuarios();
@@ -742,7 +751,7 @@ function realizarLogin(event) {
         }));
 
         alert("Bem-vindo, administrador!");
-        setTimeout(function() {
+        setTimeout(() => {
             window.location.href = "relatorio.html";
         }, 1000);
         return;
@@ -786,7 +795,7 @@ function inicializarLogin() {
     const botaoAdmin = document.getElementById("btnLoginAdmin");
 
     if (botaoAdmin) {
-        botaoAdmin.addEventListener("click", function() {
+        botaoAdmin.addEventListener("click", () => {
             const email = document.getElementById("email").value.trim();
             const senha = document.getElementById("password").value;
 
@@ -798,7 +807,7 @@ function inicializarLogin() {
                 }));
 
                 alert("Bem-vindo, administrador!");
-                setTimeout(function() {
+                setTimeout(() => {
                     window.location.href = "relatorio.html";
                 }, 1000);
                 return;
@@ -809,30 +818,30 @@ function inicializarLogin() {
     }
 }
 
-function verificarUsuarioLogado() {
+const verificarUsuarioLogado = () => {
     return localStorage.getItem("usuarioLogado");
-}
+};
 
-function obterUsuarioLogado() {
+const obterUsuarioLogado = () => {
     const usuario = localStorage.getItem("usuarioLogado");
     return usuario ? JSON.parse(usuario) : null;
-}
+};
 
-function verificarAdminLogado() {
+const verificarAdminLogado = () => {
     return localStorage.getItem("adminLogado");
-}
+};
 
-function sairAdmin() {
+const sairAdmin = () => {
     localStorage.removeItem("adminLogado");
     localStorage.removeItem("usuarioLogado");
     window.location.href = "login.html";
-}
+};
 
 function salvarUsuarioLogado(usuarioAtualizado) {
     localStorage.setItem("usuarioLogado", JSON.stringify(usuarioAtualizado));
 
     const usuarios = obterUsuarios();
-    const usuariosAtualizados = usuarios.map(function(usuario) {
+    const usuariosAtualizados = usuarios.map((usuario) => {
         if (usuario.id === usuarioAtualizado.id) {
             return usuarioAtualizado;
         }
@@ -842,19 +851,19 @@ function salvarUsuarioLogado(usuarioAtualizado) {
     salvarUsuarios(usuariosAtualizados);
 }
 
-function obterHistoricoCompras() {
+const obterHistoricoCompras = () => {
     return JSON.parse(localStorage.getItem("historicoCompras") || "[]");
-}
+};
 
-function obterClientesAdministracao() {
-    return obterUsuarios().filter(function(usuario) {
+const obterClientesAdministracao = () => {
+    return obterUsuarios().filter((usuario) => {
         return usuario.email !== "admin@ifsc.com";
     });
-}
+};
 
-function normalizarTexto(texto) {
+const normalizarTexto = (texto) => {
     return String(texto || "").toLowerCase();
-}
+};
 
 function renderizarRelatorioAdmin() {
     const totalClientes = document.getElementById("totalClientes");
@@ -884,19 +893,19 @@ function renderizarRelatorioAdmin() {
 
     function renderizarClientes() {
         const termo = normalizarTexto(termoCliente);
-        const clientesFiltrados = clientes.filter(function(cliente) {
+        const clientesFiltrados = clientes.filter((cliente) => {
             if (!termo) {
                 return true;
             }
 
-            return [cliente.id, cliente.nome, cliente.email, cliente.cpf].some(function(campo) {
+            return [cliente.id, cliente.nome, cliente.email, cliente.cpf].some((campo) => {
                 return normalizarTexto(campo).indexOf(termo) !== -1;
             });
         });
 
         if (tbodyClientes) {
-            tbodyClientes.innerHTML = clientesFiltrados.length ? clientesFiltrados.map(function(cliente) {
-                const totalComprasCliente = compras.filter(function(compra) {
+            tbodyClientes.innerHTML = clientesFiltrados.length ? clientesFiltrados.map((cliente) => {
+                const totalComprasCliente = compras.filter((compra) => {
                     return compra.usuarioId === cliente.id;
                 }).length;
 
@@ -919,16 +928,16 @@ function renderizarRelatorioAdmin() {
 
     function renderizarCompras() {
         const termo = normalizarTexto(termoCompra);
-        const comprasFiltradas = compras.filter(function(compra) {
+        const comprasFiltradas = compras.filter((compra) => {
             if (!termo || filtroAtual === "todas") {
                 return true;
             }
 
-            const cliente = clientes.find(function(item) {
+            const cliente = clientes.find((item) => {
                 return item.id === compra.usuarioId;
             });
 
-            const itensTexto = compra.itens.map(function(item) {
+            const itensTexto = compra.itens.map((item) => {
                 return item.nome;
             }).join(" ");
             const totalTexto = formatarPreco(compra.total);
@@ -962,11 +971,11 @@ function renderizarRelatorioAdmin() {
         });
 
         if (tbodyCompras) {
-            tbodyCompras.innerHTML = comprasFiltradas.length ? comprasFiltradas.map(function(compra) {
-                const cliente = clientes.find(function(item) {
+            tbodyCompras.innerHTML = comprasFiltradas.length ? comprasFiltradas.map((compra) => {
+                const cliente = clientes.find((item) => {
                     return item.id === compra.usuarioId;
                 });
-                const itensResumo = compra.itens.map(function(item) {
+                const itensResumo = compra.itens.map((item) => {
                     return `${item.quantidade}x ${item.nome}`;
                 }).join(", ");
 
@@ -990,7 +999,7 @@ function renderizarRelatorioAdmin() {
     if (totalClientes) totalClientes.textContent = clientes.length;
     if (totalComprasAdmin) totalComprasAdmin.textContent = compras.length;
     if (receitaTotalAdmin) {
-        receitaTotalAdmin.textContent = formatarPreco(compras.reduce(function(total, compra) {
+        receitaTotalAdmin.textContent = formatarPreco(compras.reduce((total, compra) => {
             return total + compra.total;
         }, 0));
     }
@@ -999,21 +1008,21 @@ function renderizarRelatorioAdmin() {
     renderizarCompras();
 
     if (inputCliente) {
-        inputCliente.addEventListener("input", function() {
+        inputCliente.addEventListener("input", () => {
             termoCliente = inputCliente.value;
             renderizarClientes();
         });
     }
 
     if (inputCompra) {
-        inputCompra.addEventListener("input", function() {
+        inputCompra.addEventListener("input", () => {
             termoCompra = inputCompra.value;
             renderizarCompras();
         });
     }
 
     if (filtroCompra) {
-        filtroCompra.addEventListener("change", function() {
+        filtroCompra.addEventListener("change", () => {
             filtroAtual = filtroCompra.value;
             renderizarCompras();
         });
@@ -1029,7 +1038,7 @@ function inicializarBotaoConta() {
         return;
     }
 
-    botaoConta.addEventListener("click", function(event) {
+    botaoConta.addEventListener("click", (event) => {
         event.preventDefault();
 
         if (verificarUsuarioLogado()) {
@@ -1075,7 +1084,7 @@ function renderizarHistoricoCompras() {
         return;
     }
 
-    const historicoCompras = obterHistoricoCompras().filter(function(compra) {
+    const historicoCompras = obterHistoricoCompras().filter((compra) => {
         return compra.usuarioId === usuario.id;
     });
 
@@ -1090,8 +1099,8 @@ function renderizarHistoricoCompras() {
     mensagemCompras.style.display = "none";
     listaCompras.style.display = "block";
 
-    listaCompras.innerHTML = historicoCompras.map(function(compra) {
-        const itensResumo = compra.itens.map(function(item) {
+    listaCompras.innerHTML = historicoCompras.map((compra) => {
+        const itensResumo = compra.itens.map((item) => {
             return `${item.quantidade}x ${item.nome}`;
         }).join(", ");
 
@@ -1108,7 +1117,7 @@ function renderizarHistoricoCompras() {
     }).join("");
 
     totalCompras.textContent = historicoCompras.length;
-    gastoTotal.textContent = formatarPreco(historicoCompras.reduce(function(total, compra) {
+    gastoTotal.textContent = formatarPreco(historicoCompras.reduce((total, compra) => {
         return total + compra.total;
     }, 0));
 }
@@ -1121,8 +1130,8 @@ function abrirModalCompra(compra) {
         return;
     }
 
-    const itensHtml = compra.itens.map(function(item) {
-        const tiposHtml = item.tipos.map(function(tipo) {
+    const itensHtml = compra.itens.map((item) => {
+        const tiposHtml = item.tipos.map((tipo) => {
             return `<span class="${tipo.classe}">${tipo.nome}</span>`;
         }).join("");
 
@@ -1172,7 +1181,7 @@ function inicializarModalCompras() {
     const modal = document.getElementById("modalCompra");
 
     if (listaCompras) {
-        listaCompras.addEventListener("click", function(event) {
+        listaCompras.addEventListener("click", (event) => {
             const itemCompra = event.target.closest("[data-compra-id]");
 
             if (!itemCompra) {
@@ -1181,7 +1190,7 @@ function inicializarModalCompras() {
 
             const usuario = obterUsuarioLogado();
             const historicoCompras = obterHistoricoCompras();
-            const compra = historicoCompras.find(function(item) {
+            const compra = historicoCompras.find((item) => {
                 return item.id === itemCompra.getAttribute("data-compra-id") && item.usuarioId === usuario.id;
             });
 
@@ -1196,7 +1205,7 @@ function inicializarModalCompras() {
     }
 
     if (modal) {
-        modal.addEventListener("click", function(event) {
+        modal.addEventListener("click", (event) => {
             if (event.target === modal) {
                 fecharModalCompra();
             }
@@ -1271,7 +1280,7 @@ function ativarEdicaoConta() {
         botaoEditar.setAttribute("aria-label", "Editar informações");
     }
 
-    botaoEditar.addEventListener("click", function() {
+    botaoEditar.addEventListener("click", () => {
         if (!modoEdicao) {
             entrarModoEdicao();
             return;
@@ -1292,7 +1301,7 @@ function inicializarConta() {
     const botaoSair = document.getElementById("btnSair");
 
     if (botaoSair) {
-        botaoSair.addEventListener("click", function(event) {
+        botaoSair.addEventListener("click", (event) => {
             event.preventDefault();
             localStorage.removeItem("usuarioLogado");
             localStorage.removeItem("adminLogado");
@@ -1311,7 +1320,7 @@ function inicializarRelatorioAdmin() {
     const botaoSairAdmin = document.getElementById("btnSairAdmin");
 
     if (botaoSairAdmin) {
-        botaoSairAdmin.addEventListener("click", function() {
+        botaoSairAdmin.addEventListener("click", () => {
             sairAdmin();
         });
     }

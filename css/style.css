@@ -120,7 +120,7 @@ nav button {
 }
 
 .banner {
-    background: url(/img/banner.webp) center/cover;
+    background: url(/media/img/banner.webp) center/cover;
     height: 256px;
     border-bottom: 4px solid var(--verdemusgo);
     display: flex;
