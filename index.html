@@ -36,7 +36,19 @@
         <div class="main-conteudo">
             <h2 class="section-titulo">POKEMONS DISPONIVEIS</h2>
             <div class="section-divisor"></div>
-            <p class="section-subtitulo">Pokedex: 12 Pokémons para capturar</p>
+
+            <div class="pokemon-filtros">
+                <div class="pokemon-filtro-campo">
+                    <label for="filtroNomePokemon">Buscar por nome</label>
+                    <input type="text" id="filtroNomePokemon" placeholder="Digite o nome do Pokémon">
+                </div>
+                <div class="pokemon-filtro-campo">
+                    <label for="filtroTipoPokemon">Filtrar por tipo</label>
+                    <select id="filtroTipoPokemon">
+                        <option value="">Todos os tipos</option>
+                    </select>
+                </div>
+            </div>
 
 
             <div class="pokemon-grid"></div>

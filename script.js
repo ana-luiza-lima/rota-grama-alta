@@ -219,13 +219,72 @@ function criarCardPokemon(pokemon) {
 
 function renderizarPokemons() {
     const grade = document.querySelector(".pokemon-grid");
+    const inputNome = document.getElementById("filtroNomePokemon");
+    const selectTipo = document.getElementById("filtroTipoPokemon");
+    const contadorPokemons = document.getElementById("contadorPokemons");
 
     if (!grade) {
         return;
     }
 
     const pokemons = Object.values(estoque);
-    grade.innerHTML = pokemons.map(criarCardPokemon).join("");
+    const termoNome = normalizarTexto(inputNome ? inputNome.value.trim() : "");
+    const tipoSelecionado = normalizarTexto(selectTipo ? selectTipo.value : "");
+
+    const pokemonsFiltrados = pokemons.filter((pokemon) => {
+        const nomeConfere = normalizarTexto(pokemon.nome).includes(termoNome);
+        const tipoConfere = !tipoSelecionado || pokemon.tipos.some((tipo) => {
+            return normalizarTexto(tipo.nome) === tipoSelecionado;
+        });
+        return nomeConfere && tipoConfere;
+    });
+
+    if (contadorPokemons) {
+        const filtroAtivo = Boolean(termoNome || tipoSelecionado);
+        contadorPokemons.textContent = filtroAtivo
+            ? `Pokedex: ${pokemonsFiltrados.length} Pokémon(s) encontrado(s)`
+            : `Pokedex: ${pokemons.length} Pokémons para capturar`;
+    }
+
+    if (!pokemonsFiltrados.length) {
+        grade.innerHTML = `<div class="pokemon-filtro-vazio">Nenhum Pokémon encontrado com esse filtro.</div>`;
+        return;
+    }
+
+    grade.innerHTML = pokemonsFiltrados.map(criarCardPokemon).join("");
+}
+
+const obterTiposPokemon = () => {
+    const tiposUnicos = new Set();
+
+    Object.values(estoque).forEach((pokemon) => {
+        pokemon.tipos.forEach((tipo) => {
+            tiposUnicos.add(tipo.nome);
+        });
+    });
+
+    return Array.from(tiposUnicos).sort((tipoA, tipoB) => {
+        return tipoA.localeCompare(tipoB, "pt-BR");
+    });
+};
+
+function inicializarFiltrosPokemons() {
+    const inputNome = document.getElementById("filtroNomePokemon");
+    const selectTipo = document.getElementById("filtroTipoPokemon");
+
+    if (!inputNome || !selectTipo) {
+        return;
+    }
+
+    const tiposDisponiveis = obterTiposPokemon();
+
+    selectTipo.innerHTML = `
+        <option value="">Todos os tipos</option>
+        ${tiposDisponiveis.map((tipo) => `<option value="${normalizarTexto(tipo)}">${tipo}</option>`).join("")}
+    `;
+
+    inputNome.addEventListener("input", renderizarPokemons);
+    selectTipo.addEventListener("change", renderizarPokemons);
 }
 
 // Footer
@@ -242,15 +301,16 @@ function renderizarFooter() {
             <div class="footer-grid">
                 <div class="footer-section">
                     <h4>SOBRE</h4>
-                    <p>Rota Grama Alta oficial para captura e treinamento de Pokémon.</p>
+                    <p>A Rota Grama Alta é um centro especializado em captura e venda de Pokémons localizado na região mais verde e exuberante de Kanto.</p>
                 </div>
-                <div class="footer-section">
+                <div class="footer-section footer-section-contato">
                     <h4>CONTATO</h4>
-                    <p>Email: rotagramalta@pokemon.com<br>Tel: (55) 9999-9999</p>
+                    <p>Email: rota.grama.alta@pokemon.com<br>Tel: (55) 9999-9999</p>
                 </div>
             </div>
             <div class="footer-divisor">
-                <p>© 2026 Rota Grama Alta. Todos os direitos reservados. Fire Red Edition.</p>
+                <p>© 2026 Rota Grama Alta. Todos os direitos reservados.</p>
+                <p>Projeto realizado por Ana Lima e Gabriele Bueno do IFSC para disciplina de Frontend I</p>
             </div>
         </div>
     `;
@@ -1309,6 +1369,7 @@ function inicializarRelatorioAdmin() {
 
 // Inicializa
 
+document.addEventListener("DOMContentLoaded", inicializarFiltrosPokemons);
 document.addEventListener("DOMContentLoaded", renderizarPokemons);
 document.addEventListener("DOMContentLoaded", renderizarFooter);
 document.addEventListener("DOMContentLoaded", renderizarCarrinho);
@@ -1364,4 +1425,28 @@ function inicializarBotoesNavegacao() {
     }
 }
 
+function inicializarCliqueTitulo() {
+    const paginaAtual = window.location.pathname.toLowerCase();
+
+    if (paginaAtual.includes("relatorio.html")) {
+        return;
+    }
+
+    const titulos = document.querySelectorAll("h1");
+
+    titulos.forEach((titulo) => {
+        const textoTitulo = normalizarTexto(titulo.textContent).trim();
+
+        if (textoTitulo !== "rota grama alta") {
+            return;
+        }
+
+        titulo.classList.add("titulo-home-link");
+        titulo.addEventListener("click", () => {
+            window.location.href = "index.html";
+        });
+    });
+}
+
 document.addEventListener("DOMContentLoaded", inicializarBotoesNavegacao);
+document.addEventListener("DOMContentLoaded", inicializarCliqueTitulo);

@@ -60,6 +60,10 @@ header h1 {
     color: #FFFFFF;
 }
 
+.titulo-home-link {
+    cursor: pointer;
+}
+
 .header-direito {
     display: flex;
     gap: 0.5rem;
@@ -201,6 +205,44 @@ body.footer-ancorado main {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
+}
+
+.pokemon-filtros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.pokemon-filtro-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.pokemon-filtro-campo label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+.pokemon-filtro-campo input,
+.pokemon-filtro-campo select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--verdemusgo);
+    background: #FFFFFF;
+    color: var(--verdegrama);
+    font-family: inherit;
+}
+
+.pokemon-filtro-vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-weight: bold;
+    padding: 1rem;
+    border: 2px dashed var(--verdemusgo);
+    background: #F1F8E9;
 }
 
 .pokemon-card {
@@ -520,6 +562,10 @@ body.footer-ancorado footer {
 .footer-section p {
     font-size: 0.85rem;
     line-height: 1.6;
+}
+
+.footer-section-contato {
+    text-align: right;
 }
 
 .footer-section a {
