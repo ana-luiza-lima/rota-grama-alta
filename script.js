@@ -1345,3 +1345,25 @@ document.getElementById("btnConta").addEventListener("click", function () {
 document.getElementById("btnCarrinho").addEventListener("click", function () {
     window.location.href = "carrinho.html";
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btnVoltar = document.getElementById("btnVoltar");
+    if (btnVoltar) {
+        btnVoltar.addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+    }
+
+    const btnPokedex = document.getElementById("btnPokedex");
+    if (btnPokedex) {
+        btnPokedex.addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+    }
+
+});
+
+document.getElementById("btnVoltar").addEventListener("click", function () {
+    window.location.href = "index.html";
+});
