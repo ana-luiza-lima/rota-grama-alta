@@ -1323,41 +1323,45 @@ document.addEventListener("DOMContentLoaded", inicializarCapturaPokemons);
 
 ///////////////botões
 
-const btnSobre = document.getElementById("btnSobre");
-if (btnSobre) {
-    btnSobre.addEventListener("click", function () {
-        window.location.href = "sobre.html";
-    });
-}
-
-const btnConta = document.getElementById("btnConta");
-if (btnConta) {
-    btnConta.addEventListener("click", function () {
-        window.location.href = "conta.html";
-    });
-}
-
-const btnCarrinho = document.getElementById("btnCarrinho");
-if (btnCarrinho) {
-    btnCarrinho.addEventListener("click", function () {
-        window.location.href = "carrinho.html";
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-
+function inicializarBotoesNavegacao() {
+    const btnSobre = document.getElementById("btnSobre");
+    const btnCarrinho = document.getElementById("btnCarrinho");
     const btnVoltar = document.getElementById("btnVoltar");
-    if (btnVoltar) {
-        btnVoltar.addEventListener("click", function () {
-            window.location.href = "index.html";
-        });
-    }
-
     const btnPokedex = document.getElementById("btnPokedex");
-    if (btnPokedex) {
-        btnPokedex.addEventListener("click", function () {
+    const paginaAtual = window.location.pathname.toLowerCase();
+    const estaNaPaginaSobre = paginaAtual.includes("sobre.html");
+
+    if (btnSobre) {
+        if (estaNaPaginaSobre) {
+            btnSobre.textContent = "INICIO";
+            btnSobre.addEventListener("click", () => {
+                window.location.href = "index.html";
+            });
+        } else {
+            btnSobre.textContent = "SOBRE";
+            btnSobre.addEventListener("click", () => {
+                window.location.href = "sobre.html";
+            });
+        }
+    }
+
+    if (btnCarrinho) {
+        btnCarrinho.addEventListener("click", () => {
+            window.location.href = "carrinho.html";
+        });
+    }
+
+    if (btnVoltar) {
+        btnVoltar.addEventListener("click", () => {
             window.location.href = "index.html";
         });
     }
 
-});
+    if (btnPokedex) {
+        btnPokedex.addEventListener("click", () => {
+            window.location.href = "index.html";
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", inicializarBotoesNavegacao);
